@@ -75,7 +75,6 @@ namespace Random_Data_Generator
 			Application xlApp;
 			Workbook workBook;
 			Worksheet workSheet;
-			Range range;
 
 			xlApp = new Application();
 			if (xlApp == null)

@@ -72,6 +72,11 @@
 	Private Sub btnContinue_Click(sender As Object, e As EventArgs) Handles btnContinue.Click       'Continues to next panel
 		LaunchPanel.Hide()
 		ComparisonPanel.Show()
+		tcLeft.SelectedIndex = 1
+		tcRight.SelectedIndex = 1
+		er.Read_Excel(er.ResultsFilePath, 1)
+		er.Read_Excel(er.StudentFilePath, 2)
+
 	End Sub
 
 	Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load

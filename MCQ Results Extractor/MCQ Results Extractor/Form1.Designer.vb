@@ -26,7 +26,7 @@ Partial Class Form1
 		Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
 		Me.LaunchPanel = New System.Windows.Forms.Panel()
 		Me.ComparisonPanel = New System.Windows.Forms.Panel()
-		Me.TabControl1 = New System.Windows.Forms.TabControl()
+		Me.tcLeft = New System.Windows.Forms.TabControl()
 		Me.tabMatched1 = New System.Windows.Forms.TabPage()
 		Me.tabUnmatched1 = New System.Windows.Forms.TabPage()
 		Me.btnSave = New System.Windows.Forms.Button()
@@ -40,26 +40,26 @@ Partial Class Form1
 		Me.btnBrowse2 = New System.Windows.Forms.Button()
 		Me.btnBrowse1 = New System.Windows.Forms.Button()
 		Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-		Me.TabControl2 = New System.Windows.Forms.TabControl()
+		Me.tcRight = New System.Windows.Forms.TabControl()
 		Me.tabMatched2 = New System.Windows.Forms.TabPage()
 		Me.tabUnmatched2 = New System.Windows.Forms.TabPage()
-		Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-		Me.DataGridView2 = New System.Windows.Forms.DataGridView()
-		Me.DataGridView3 = New System.Windows.Forms.DataGridView()
-		Me.DataGridView4 = New System.Windows.Forms.DataGridView()
+		Me.dgMatchedLeft = New System.Windows.Forms.DataGridView()
+		Me.dgMatchedRight = New System.Windows.Forms.DataGridView()
+		Me.dgUnmatchedLeft = New System.Windows.Forms.DataGridView()
+		Me.dgUnmatchedRight = New System.Windows.Forms.DataGridView()
 		Me.btnMatch = New System.Windows.Forms.Button()
 		Me.LaunchPanel.SuspendLayout()
 		Me.ComparisonPanel.SuspendLayout()
-		Me.TabControl1.SuspendLayout()
+		Me.tcLeft.SuspendLayout()
 		Me.tabMatched1.SuspendLayout()
 		Me.tabUnmatched1.SuspendLayout()
-		Me.TabControl2.SuspendLayout()
+		Me.tcRight.SuspendLayout()
 		Me.tabMatched2.SuspendLayout()
 		Me.tabUnmatched2.SuspendLayout()
-		CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-		CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
-		CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
-		CType(Me.DataGridView4, System.ComponentModel.ISupportInitialize).BeginInit()
+		CType(Me.dgMatchedLeft, System.ComponentModel.ISupportInitialize).BeginInit()
+		CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).BeginInit()
+		CType(Me.dgUnmatchedLeft, System.ComponentModel.ISupportInitialize).BeginInit()
+		CType(Me.dgUnmatchedRight, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
 		'
 		'btnContinue
@@ -97,8 +97,8 @@ Partial Class Form1
 		'
 		'ComparisonPanel
 		'
-		Me.ComparisonPanel.Controls.Add(Me.TabControl2)
-		Me.ComparisonPanel.Controls.Add(Me.TabControl1)
+		Me.ComparisonPanel.Controls.Add(Me.tcRight)
+		Me.ComparisonPanel.Controls.Add(Me.tcLeft)
 		Me.ComparisonPanel.Controls.Add(Me.btnMatch)
 		Me.ComparisonPanel.Controls.Add(Me.btnSave)
 		Me.ComparisonPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -108,20 +108,20 @@ Partial Class Form1
 		Me.ComparisonPanel.TabIndex = 14
 		Me.ComparisonPanel.Visible = False
 		'
-		'TabControl1
+		'tcLeft
 		'
-		Me.TabControl1.Controls.Add(Me.tabMatched1)
-		Me.TabControl1.Controls.Add(Me.tabUnmatched1)
-		Me.TabControl1.Location = New System.Drawing.Point(31, 12)
-		Me.TabControl1.Name = "TabControl1"
-		Me.TabControl1.SelectedIndex = 0
-		Me.TabControl1.Size = New System.Drawing.Size(357, 295)
-		Me.TabControl1.TabIndex = 6
+		Me.tcLeft.Controls.Add(Me.tabMatched1)
+		Me.tcLeft.Controls.Add(Me.tabUnmatched1)
+		Me.tcLeft.Location = New System.Drawing.Point(31, 12)
+		Me.tcLeft.Name = "tcLeft"
+		Me.tcLeft.SelectedIndex = 0
+		Me.tcLeft.Size = New System.Drawing.Size(357, 295)
+		Me.tcLeft.TabIndex = 6
 		'
 		'tabMatched1
 		'
 		Me.tabMatched1.AutoScroll = True
-		Me.tabMatched1.Controls.Add(Me.DataGridView1)
+		Me.tabMatched1.Controls.Add(Me.dgMatchedLeft)
 		Me.tabMatched1.Location = New System.Drawing.Point(4, 22)
 		Me.tabMatched1.Name = "tabMatched1"
 		Me.tabMatched1.Padding = New System.Windows.Forms.Padding(3)
@@ -132,7 +132,7 @@ Partial Class Form1
 		'
 		'tabUnmatched1
 		'
-		Me.tabUnmatched1.Controls.Add(Me.DataGridView3)
+		Me.tabUnmatched1.Controls.Add(Me.dgUnmatchedLeft)
 		Me.tabUnmatched1.Location = New System.Drawing.Point(4, 22)
 		Me.tabUnmatched1.Name = "tabUnmatched1"
 		Me.tabUnmatched1.Padding = New System.Windows.Forms.Padding(3)
@@ -185,9 +185,9 @@ Partial Class Form1
 		Me.lblOutput.AutoSize = True
 		Me.lblOutput.Location = New System.Drawing.Point(351, 276)
 		Me.lblOutput.Name = "lblOutput"
-		Me.lblOutput.Size = New System.Drawing.Size(95, 13)
+		Me.lblOutput.Size = New System.Drawing.Size(98, 13)
 		Me.lblOutput.TabIndex = 12
-		Me.lblOutput.Text = "Ouput file location:"
+		Me.lblOutput.Text = "Output file location:"
 		Me.lblOutput.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 		'
 		'lblStudents
@@ -241,20 +241,20 @@ Partial Class Form1
 		Me.btnBrowse1.Text = "Browse..."
 		Me.btnBrowse1.UseVisualStyleBackColor = True
 		'
-		'TabControl2
+		'tcRight
 		'
-		Me.TabControl2.Controls.Add(Me.tabMatched2)
-		Me.TabControl2.Controls.Add(Me.tabUnmatched2)
-		Me.TabControl2.Location = New System.Drawing.Point(411, 12)
-		Me.TabControl2.Name = "TabControl2"
-		Me.TabControl2.SelectedIndex = 0
-		Me.TabControl2.Size = New System.Drawing.Size(357, 295)
-		Me.TabControl2.TabIndex = 6
+		Me.tcRight.Controls.Add(Me.tabMatched2)
+		Me.tcRight.Controls.Add(Me.tabUnmatched2)
+		Me.tcRight.Location = New System.Drawing.Point(411, 12)
+		Me.tcRight.Name = "tcRight"
+		Me.tcRight.SelectedIndex = 0
+		Me.tcRight.Size = New System.Drawing.Size(357, 295)
+		Me.tcRight.TabIndex = 6
 		'
 		'tabMatched2
 		'
 		Me.tabMatched2.AutoScroll = True
-		Me.tabMatched2.Controls.Add(Me.DataGridView2)
+		Me.tabMatched2.Controls.Add(Me.dgMatchedRight)
 		Me.tabMatched2.Location = New System.Drawing.Point(4, 22)
 		Me.tabMatched2.Name = "tabMatched2"
 		Me.tabMatched2.Padding = New System.Windows.Forms.Padding(3)
@@ -265,7 +265,7 @@ Partial Class Form1
 		'
 		'tabUnmatched2
 		'
-		Me.tabUnmatched2.Controls.Add(Me.DataGridView4)
+		Me.tabUnmatched2.Controls.Add(Me.dgUnmatchedRight)
 		Me.tabUnmatched2.Location = New System.Drawing.Point(4, 22)
 		Me.tabUnmatched2.Name = "tabUnmatched2"
 		Me.tabUnmatched2.Padding = New System.Windows.Forms.Padding(3)
@@ -274,55 +274,54 @@ Partial Class Form1
 		Me.tabUnmatched2.Text = "Unmatched"
 		Me.tabUnmatched2.UseVisualStyleBackColor = True
 		'
-		'DataGridView1
+		'dgMatchedLeft
 		'
-		Me.DataGridView1.AllowUserToAddRows = False
-		Me.DataGridView1.AllowUserToDeleteRows = False
-		Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-		Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.DataGridView1.Location = New System.Drawing.Point(3, 3)
-		Me.DataGridView1.Name = "DataGridView1"
-		Me.DataGridView1.Size = New System.Drawing.Size(343, 263)
-		Me.DataGridView1.TabIndex = 0
+		Me.dgMatchedLeft.AllowUserToAddRows = False
+		Me.dgMatchedLeft.AllowUserToDeleteRows = False
+		Me.dgMatchedLeft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.dgMatchedLeft.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.dgMatchedLeft.Location = New System.Drawing.Point(3, 3)
+		Me.dgMatchedLeft.Name = "dgMatchedLeft"
+		Me.dgMatchedLeft.Size = New System.Drawing.Size(343, 263)
+		Me.dgMatchedLeft.TabIndex = 0
 		'
-		'DataGridView2
+		'dgMatchedRight
 		'
-		Me.DataGridView2.AllowUserToAddRows = False
-		Me.DataGridView2.AllowUserToDeleteRows = False
-		Me.DataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-		Me.DataGridView2.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.DataGridView2.Location = New System.Drawing.Point(3, 3)
-		Me.DataGridView2.Name = "DataGridView2"
-		Me.DataGridView2.Size = New System.Drawing.Size(343, 263)
-		Me.DataGridView2.TabIndex = 0
+		Me.dgMatchedRight.AllowUserToAddRows = False
+		Me.dgMatchedRight.AllowUserToDeleteRows = False
+		Me.dgMatchedRight.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.dgMatchedRight.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.dgMatchedRight.Location = New System.Drawing.Point(3, 3)
+		Me.dgMatchedRight.Name = "dgMatchedRight"
+		Me.dgMatchedRight.Size = New System.Drawing.Size(343, 263)
+		Me.dgMatchedRight.TabIndex = 0
 		'
-		'DataGridView3
+		'dgUnmatchedLeft
 		'
-		Me.DataGridView3.AllowUserToAddRows = False
-		Me.DataGridView3.AllowUserToDeleteRows = False
-		Me.DataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-		Me.DataGridView3.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.DataGridView3.Location = New System.Drawing.Point(3, 3)
-		Me.DataGridView3.Name = "DataGridView3"
-		Me.DataGridView3.Size = New System.Drawing.Size(343, 263)
-		Me.DataGridView3.TabIndex = 0
+		Me.dgUnmatchedLeft.AllowUserToAddRows = False
+		Me.dgUnmatchedLeft.AllowUserToDeleteRows = False
+		Me.dgUnmatchedLeft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.dgUnmatchedLeft.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.dgUnmatchedLeft.Location = New System.Drawing.Point(3, 3)
+		Me.dgUnmatchedLeft.Name = "dgUnmatchedLeft"
+		Me.dgUnmatchedLeft.Size = New System.Drawing.Size(343, 263)
+		Me.dgUnmatchedLeft.TabIndex = 0
 		'
-		'DataGridView4
+		'dgUnmatchedRight
 		'
-		Me.DataGridView4.AllowUserToAddRows = False
-		Me.DataGridView4.AllowUserToDeleteRows = False
-		Me.DataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-		Me.DataGridView4.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.DataGridView4.Location = New System.Drawing.Point(3, 3)
-		Me.DataGridView4.Name = "DataGridView4"
-		Me.DataGridView4.ReadOnly = True
-		Me.DataGridView4.Size = New System.Drawing.Size(343, 263)
-		Me.DataGridView4.TabIndex = 0
+		Me.dgUnmatchedRight.AllowUserToAddRows = False
+		Me.dgUnmatchedRight.AllowUserToDeleteRows = False
+		Me.dgUnmatchedRight.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.dgUnmatchedRight.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.dgUnmatchedRight.Location = New System.Drawing.Point(3, 3)
+		Me.dgUnmatchedRight.Name = "dgUnmatchedRight"
+		Me.dgUnmatchedRight.ReadOnly = True
+		Me.dgUnmatchedRight.Size = New System.Drawing.Size(343, 263)
+		Me.dgUnmatchedRight.TabIndex = 0
 		'
 		'btnMatch
 		'
 		Me.btnMatch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.btnMatch.Enabled = False
 		Me.btnMatch.Location = New System.Drawing.Point(362, 328)
 		Me.btnMatch.Name = "btnMatch"
 		Me.btnMatch.Size = New System.Drawing.Size(75, 23)
@@ -343,16 +342,16 @@ Partial Class Form1
 		Me.LaunchPanel.ResumeLayout(False)
 		Me.LaunchPanel.PerformLayout()
 		Me.ComparisonPanel.ResumeLayout(False)
-		Me.TabControl1.ResumeLayout(False)
+		Me.tcLeft.ResumeLayout(False)
 		Me.tabMatched1.ResumeLayout(False)
 		Me.tabUnmatched1.ResumeLayout(False)
-		Me.TabControl2.ResumeLayout(False)
+		Me.tcRight.ResumeLayout(False)
 		Me.tabMatched2.ResumeLayout(False)
 		Me.tabUnmatched2.ResumeLayout(False)
-		CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-		CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
-		CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).EndInit()
-		CType(Me.DataGridView4, System.ComponentModel.ISupportInitialize).EndInit()
+		CType(Me.dgMatchedLeft, System.ComponentModel.ISupportInitialize).EndInit()
+		CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
+		CType(Me.dgUnmatchedLeft, System.ComponentModel.ISupportInitialize).EndInit()
+		CType(Me.dgUnmatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.ResumeLayout(False)
 
 	End Sub
@@ -369,17 +368,17 @@ Partial Class Form1
 	Friend WithEvents btnBrowse3 As Button
 	Friend WithEvents btnBrowse2 As Button
 	Friend WithEvents ComparisonPanel As Panel
-	Friend WithEvents TabControl1 As TabControl
+	Friend WithEvents tcLeft As TabControl
 	Friend WithEvents tabMatched1 As TabPage
 	Friend WithEvents tabUnmatched1 As TabPage
 	Friend WithEvents btnSave As Button
 	Friend WithEvents SaveFileDialog1 As SaveFileDialog
-	Friend WithEvents TabControl2 As TabControl
+	Friend WithEvents tcRight As TabControl
 	Friend WithEvents tabMatched2 As TabPage
 	Friend WithEvents tabUnmatched2 As TabPage
-	Friend WithEvents DataGridView2 As DataGridView
-	Friend WithEvents DataGridView4 As DataGridView
-	Friend WithEvents DataGridView1 As DataGridView
-	Friend WithEvents DataGridView3 As DataGridView
+	Friend WithEvents dgMatchedRight As DataGridView
+	Friend WithEvents dgUnmatchedRight As DataGridView
+	Friend WithEvents dgMatchedLeft As DataGridView
+	Friend WithEvents dgUnmatchedLeft As DataGridView
 	Friend WithEvents btnMatch As Button
 End Class
