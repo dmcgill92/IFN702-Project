@@ -69,17 +69,25 @@
 		End With
 	End Sub
 
-	Private Sub btnContinue_Click(sender As Object, e As EventArgs) Handles btnContinue.Click       'Continues to next panel
-		LaunchPanel.Hide()
-		ComparisonPanel.Show()
-		tcLeft.SelectedIndex = 1
-		tcRight.SelectedIndex = 1
-		er.Read_Excel(er.ResultsFilePath, 1)
-		er.Read_Excel(er.StudentFilePath, 2)
+    Private Sub btnContinue_Click(sender As Object, e As EventArgs) Handles btnContinue.Click       'Continues to next panel
+        'Switch the current panel
+        LaunchPanel.Hide()
+        ComparisonPanel.Show()
+        'Sets the unmatched tab to active
+        tcLeft.SelectedIndex = 1
+        tcRight.SelectedIndex = 1
+        'Extract data from Excel
+        Dim binding1 As BindingSource = New BindingSource
+        er.Read_Excel(er.ResultsFilePath, 1)
+        binding1.DataSource = er.ResultsStudentList
+        dgUnmatchedLeft.DataSource = binding1
+        Dim binding2 As BindingSource = New BindingSource
+        er.Read_Excel(er.StudentFilePath, 2)
+        binding2.DataSource = er.StudentList
+        dgUnmatchedRight.DataSource = binding2
+    End Sub
 
-	End Sub
-
-	Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 	End Sub
 End Class
