@@ -19,9 +19,9 @@ Friend Class ExcelReader
     Dim _studentFilePath As String
     Dim _outputFilePath As String         'Where the output is saved
 
-    Dim _resultsStudentList As List(Of Student) = New List(Of Student)
-    Dim _studentList As List(Of Student) = New List(Of Student)
-    Dim _outputStudentList As List(Of Student) = New List(Of Student)
+    Public _resultsStudentList As List(Of Student) = New List(Of Student)
+    Public _studentList As List(Of Student) = New List(Of Student)
+    Public _outputStudentList As List(Of Student) = New List(Of Student)
 
     Public Property ResultsFilePath As String
         Get
@@ -53,63 +53,67 @@ Friend Class ExcelReader
         End Set
     End Property
 
-    Public Property ResultsStudentList As List(Of Student)
-        Get
-            Return _resultsStudentList
-        End Get
-        Set(value As List(Of Student))
-            _resultsStudentList = value
-        End Set
-    End Property
-
-    Public Property StudentList As List(Of Student)
-        Get
-            Return _studentList
-        End Get
-        Set(value As List(Of Student))
-            _studentList = value
-        End Set
-    End Property
-
-    Public Property OutputStudentList As List(Of Student)
-        Get
-            Return _outputStudentList
-        End Get
-        Set(value As List(Of Student))
-            _outputStudentList = value
-        End Set
-    End Property
-
-    Public Sub Read_Excel(ByVal sFile As String, ByVal listID As Integer) 'Extracts the data from the excel file
+    Public Function Read_Excel(ByVal sFile As String) As List(Of Student) 'Extracts the data from the excel file
         Dim file As FileInfo = New FileInfo(sFile)
         Dim xlPackage As New ExcelPackage(file)
 
         Dim workSheet = xlPackage.Workbook.Worksheets(1)
         Dim rowCount As Integer = workSheet.Dimension.End.Row
 
+        Dim tempList As List(Of Student) = New List(Of Student)
+
         For index As Integer = 2 To rowCount
             Dim fName As String = workSheet.Cells("A" & index).Value.ToString
             Dim lName As String = workSheet.Cells("B" & index).Value.ToString
             Dim sNum As String = workSheet.Cells("C" & index).Value.ToString
             Dim result As Integer = workSheet.Cells("D" & index).Value
-            Dim tempStudent As Student = New Student(fName, lName, sNum, result)
+            Dim id As Integer = index - 1
+            Dim tempStudent As Student = New Student(fName, lName, sNum, result, id, Nothing)
 
-            Select Case listID
-                Case 1
-                    ResultsStudentList.Add(tempStudent)
-                Case 2
-                    StudentList.Add(tempStudent)
-                Case 3
-                    OutputStudentList.Add(tempStudent)
-                Case Else
-                    Throw New System.Exception("Invalid List ID")
-            End Select
+
+            tempList.Add(tempStudent)
         Next
 
         xlPackage.Dispose()
-    End Sub
+        Return tempList
+    End Function
 
+    Public Function Full_Match(ByRef resultsFile As List(Of Student), ByRef studentFile As List(Of Student)) As List(Of List(Of Integer))
+        Dim rRemoveList As List(Of Integer) = New List(Of Integer)
+        Dim sRemoveList As List(Of Integer) = New List(Of Integer)
+        Dim tempList As List(Of List(Of Integer)) = New List(Of List(Of Integer))
+        Dim isMatch As Boolean
+        For Each rStudent As Student In resultsFile
+            isMatch = True
+            For Each student As Student In studentFile
+                If rStudent.FirstName <> student.FirstName Then
+                    isMatch = False
+                    Continue For
+                End If
+                If rStudent.LastName <> student.LastName Then
+                    isMatch = False
+                    Continue For
+                End If
+                If rStudent.StudentNumber <> student.StudentNumber Then
+                    isMatch = False
+                    Continue For
+                End If
+                isMatch = True
+                sRemoveList.Add(student.Id)
+                student.Result = rStudent.Result
+                Exit For
+            Next
+            If isMatch Then
+                rRemoveList.Add(rStudent.Id)
+                Continue For
+            End If
+
+        Next
+        tempList.Add(rRemoveList)
+        tempList.Add(sRemoveList)
+        Return tempList
+    End Function
     Private Sub Validate_File_Locations() Handles Me.VariableChanged    'Activates the continue button when all file locations are input and valid
-		Form1.btnContinue.Enabled = Not (_resultsFilePath = String.Empty OrElse _studentFilePath = String.Empty OrElse _outputFilePath = String.Empty)
-	End Sub
+        Form1.btnContinue.Enabled = Not (_resultsFilePath = String.Empty OrElse _studentFilePath = String.Empty)
+    End Sub
 End Class

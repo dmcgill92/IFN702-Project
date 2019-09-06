@@ -25,13 +25,10 @@ Partial Class Form1
         Me.btnContinue = New System.Windows.Forms.Button()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.LaunchPanel = New System.Windows.Forms.Panel()
-        Me.fileLocation3 = New System.Windows.Forms.TextBox()
         Me.fileLocation2 = New System.Windows.Forms.TextBox()
         Me.fileLocation1 = New System.Windows.Forms.TextBox()
-        Me.lblOutput = New System.Windows.Forms.Label()
         Me.lblStudents = New System.Windows.Forms.Label()
         Me.lblResults = New System.Windows.Forms.Label()
-        Me.btnBrowse3 = New System.Windows.Forms.Button()
         Me.btnBrowse2 = New System.Windows.Forms.Button()
         Me.btnBrowse1 = New System.Windows.Forms.Button()
         Me.ComparisonPanel = New System.Windows.Forms.Panel()
@@ -48,6 +45,7 @@ Partial Class Form1
         Me.btnMatch = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.lblMatched = New System.Windows.Forms.Label()
         Me.LaunchPanel.SuspendLayout()
         Me.ComparisonPanel.SuspendLayout()
         Me.tcRight.SuspendLayout()
@@ -79,13 +77,10 @@ Partial Class Form1
         '
         'LaunchPanel
         '
-        Me.LaunchPanel.Controls.Add(Me.fileLocation3)
         Me.LaunchPanel.Controls.Add(Me.fileLocation2)
         Me.LaunchPanel.Controls.Add(Me.fileLocation1)
-        Me.LaunchPanel.Controls.Add(Me.lblOutput)
         Me.LaunchPanel.Controls.Add(Me.lblStudents)
         Me.LaunchPanel.Controls.Add(Me.lblResults)
-        Me.LaunchPanel.Controls.Add(Me.btnBrowse3)
         Me.LaunchPanel.Controls.Add(Me.btnBrowse2)
         Me.LaunchPanel.Controls.Add(Me.btnBrowse1)
         Me.LaunchPanel.Controls.Add(Me.btnContinue)
@@ -94,15 +89,6 @@ Partial Class Form1
         Me.LaunchPanel.Name = "LaunchPanel"
         Me.LaunchPanel.Size = New System.Drawing.Size(800, 450)
         Me.LaunchPanel.TabIndex = 15
-        '
-        'fileLocation3
-        '
-        Me.fileLocation3.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.fileLocation3.Location = New System.Drawing.Point(220, 302)
-        Me.fileLocation3.Name = "fileLocation3"
-        Me.fileLocation3.ReadOnly = True
-        Me.fileLocation3.Size = New System.Drawing.Size(358, 20)
-        Me.fileLocation3.TabIndex = 13
         '
         'fileLocation2
         '
@@ -121,17 +107,6 @@ Partial Class Form1
         Me.fileLocation1.ReadOnly = True
         Me.fileLocation1.Size = New System.Drawing.Size(358, 20)
         Me.fileLocation1.TabIndex = 13
-        '
-        'lblOutput
-        '
-        Me.lblOutput.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.lblOutput.AutoSize = True
-        Me.lblOutput.Location = New System.Drawing.Point(351, 276)
-        Me.lblOutput.Name = "lblOutput"
-        Me.lblOutput.Size = New System.Drawing.Size(98, 13)
-        Me.lblOutput.TabIndex = 12
-        Me.lblOutput.Text = "Output file location:"
-        Me.lblOutput.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblStudents
         '
@@ -153,16 +128,6 @@ Partial Class Form1
         Me.lblResults.TabIndex = 12
         Me.lblResults.Text = "Result file location:"
         Me.lblResults.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'btnBrowse3
-        '
-        Me.btnBrowse3.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnBrowse3.Location = New System.Drawing.Point(362, 328)
-        Me.btnBrowse3.Name = "btnBrowse3"
-        Me.btnBrowse3.Size = New System.Drawing.Size(75, 23)
-        Me.btnBrowse3.TabIndex = 11
-        Me.btnBrowse3.Text = "Browse..."
-        Me.btnBrowse3.UseVisualStyleBackColor = True
         '
         'btnBrowse2
         '
@@ -186,6 +151,7 @@ Partial Class Form1
         '
         'ComparisonPanel
         '
+        Me.ComparisonPanel.Controls.Add(Me.lblMatched)
         Me.ComparisonPanel.Controls.Add(Me.tcRight)
         Me.ComparisonPanel.Controls.Add(Me.tcLeft)
         Me.ComparisonPanel.Controls.Add(Me.btnMatch)
@@ -199,6 +165,8 @@ Partial Class Form1
         '
         'tcRight
         '
+        Me.tcRight.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tcRight.Controls.Add(Me.tabMatched2)
         Me.tcRight.Controls.Add(Me.tabUnmatched2)
         Me.tcRight.Location = New System.Drawing.Point(411, 12)
@@ -259,6 +227,8 @@ Partial Class Form1
         '
         'tcLeft
         '
+        Me.tcLeft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tcLeft.Controls.Add(Me.tabMatched1)
         Me.tcLeft.Controls.Add(Me.tabUnmatched1)
         Me.tcLeft.Location = New System.Drawing.Point(31, 12)
@@ -318,7 +288,8 @@ Partial Class Form1
         '
         'btnMatch
         '
-        Me.btnMatch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnMatch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnMatch.Location = New System.Drawing.Point(362, 328)
         Me.btnMatch.Name = "btnMatch"
         Me.btnMatch.Size = New System.Drawing.Size(75, 23)
@@ -337,6 +308,18 @@ Partial Class Form1
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
         '
+        'lblMatched
+        '
+        Me.lblMatched.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblMatched.AutoSize = True
+        Me.lblMatched.Location = New System.Drawing.Point(363, 354)
+        Me.lblMatched.Name = "lblMatched"
+        Me.lblMatched.Size = New System.Drawing.Size(72, 13)
+        Me.lblMatched.TabIndex = 7
+        Me.lblMatched.Text = "Matched: 0/0"
+        Me.lblMatched.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -344,12 +327,14 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.ComparisonPanel)
         Me.Controls.Add(Me.LaunchPanel)
+        Me.MinimumSize = New System.Drawing.Size(800, 400)
         Me.Name = "Form1"
         Me.ShowIcon = False
         Me.Text = "MCQ Results Extractor"
         Me.LaunchPanel.ResumeLayout(False)
         Me.LaunchPanel.PerformLayout()
         Me.ComparisonPanel.ResumeLayout(False)
+        Me.ComparisonPanel.PerformLayout()
         Me.tcRight.ResumeLayout(False)
         Me.tabMatched2.ResumeLayout(False)
         CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
@@ -368,14 +353,11 @@ Partial Class Form1
 	Friend WithEvents LaunchPanel As Panel
 	Friend WithEvents fileLocation1 As TextBox
 	Friend WithEvents btnBrowse1 As Button
-	Friend WithEvents fileLocation3 As TextBox
-	Friend WithEvents fileLocation2 As TextBox
-	Friend WithEvents lblOutput As Label
-	Friend WithEvents lblStudents As Label
-	Friend WithEvents lblResults As Label
-	Friend WithEvents btnBrowse3 As Button
-	Friend WithEvents btnBrowse2 As Button
-	Friend WithEvents ComparisonPanel As Panel
+    Friend WithEvents fileLocation2 As TextBox
+    Friend WithEvents lblStudents As Label
+    Friend WithEvents lblResults As Label
+    Friend WithEvents btnBrowse2 As Button
+    Friend WithEvents ComparisonPanel As Panel
 	Friend WithEvents tcLeft As TabControl
 	Friend WithEvents tabMatched1 As TabPage
 	Friend WithEvents tabUnmatched1 As TabPage
@@ -389,4 +371,5 @@ Partial Class Form1
 	Friend WithEvents dgMatchedLeft As DataGridView
 	Friend WithEvents dgUnmatchedLeft As DataGridView
 	Friend WithEvents btnMatch As Button
+    Friend WithEvents lblMatched As Label
 End Class
