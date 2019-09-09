@@ -124,7 +124,9 @@ Public Class Form1
         tcRight.TabPages.Insert(0, tabMatched2)
         tcLeft.SelectTab(tabMatched1)
         tcRight.SelectTab(tabMatched2)
+        lblMatched.Visible = True
         lblMatched.Text = "Matched: " & numMatched & "/" & totalStudents
+        btnMatch.Enabled = False
     End Sub
 
     Private Sub tabControl_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles tcLeft.SelectedIndexChanged, tcRight.SelectedIndexChanged
@@ -161,5 +163,13 @@ Public Class Form1
                 editList.Add(student)
             End If
         Next
+    End Sub
+
+    Private Sub Form1_ResizeBegin(sender As Object, e As EventArgs) Handles MyBase.ResizeBegin
+        SuspendLayout()
+    End Sub
+
+    Private Sub Form1_ResizeEnd(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
+        ResumeLayout(True)
     End Sub
 End Class

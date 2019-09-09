@@ -32,32 +32,34 @@ Partial Class Form1
         Me.btnBrowse2 = New System.Windows.Forms.Button()
         Me.btnBrowse1 = New System.Windows.Forms.Button()
         Me.ComparisonPanel = New System.Windows.Forms.Panel()
-        Me.tcRight = New System.Windows.Forms.TabControl()
-        Me.tabMatched2 = New System.Windows.Forms.TabPage()
-        Me.dgMatchedRight = New System.Windows.Forms.DataGridView()
-        Me.tabUnmatched2 = New System.Windows.Forms.TabPage()
-        Me.dgUnmatchedRight = New System.Windows.Forms.DataGridView()
-        Me.tcLeft = New System.Windows.Forms.TabControl()
-        Me.tabMatched1 = New System.Windows.Forms.TabPage()
-        Me.dgMatchedLeft = New System.Windows.Forms.DataGridView()
-        Me.tabUnmatched1 = New System.Windows.Forms.TabPage()
-        Me.dgUnmatchedLeft = New System.Windows.Forms.DataGridView()
+        Me.lblMatched = New System.Windows.Forms.Label()
         Me.btnMatch = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.lblMatched = New System.Windows.Forms.Label()
+        Me.tcRight = New System.Windows.Forms.TabControl()
+        Me.tabUnmatched2 = New System.Windows.Forms.TabPage()
+        Me.dgUnmatchedRight = New System.Windows.Forms.DataGridView()
+        Me.tabMatched2 = New System.Windows.Forms.TabPage()
+        Me.dgMatchedRight = New System.Windows.Forms.DataGridView()
+        Me.tcLeft = New System.Windows.Forms.TabControl()
+        Me.tabUnmatched1 = New System.Windows.Forms.TabPage()
+        Me.dgUnmatchedLeft = New System.Windows.Forms.DataGridView()
+        Me.tabMatched1 = New System.Windows.Forms.TabPage()
+        Me.dgMatchedLeft = New System.Windows.Forms.DataGridView()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.LaunchPanel.SuspendLayout()
         Me.ComparisonPanel.SuspendLayout()
         Me.tcRight.SuspendLayout()
-        Me.tabMatched2.SuspendLayout()
-        CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabUnmatched2.SuspendLayout()
         CType(Me.dgUnmatchedRight, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tabMatched2.SuspendLayout()
+        CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tcLeft.SuspendLayout()
-        Me.tabMatched1.SuspendLayout()
-        CType(Me.dgMatchedLeft, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabUnmatched1.SuspendLayout()
         CType(Me.dgUnmatchedLeft, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tabMatched1.SuspendLayout()
+        CType(Me.dgMatchedLeft, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnContinue
@@ -151,9 +153,8 @@ Partial Class Form1
         '
         'ComparisonPanel
         '
+        Me.ComparisonPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.ComparisonPanel.Controls.Add(Me.lblMatched)
-        Me.ComparisonPanel.Controls.Add(Me.tcRight)
-        Me.ComparisonPanel.Controls.Add(Me.tcLeft)
         Me.ComparisonPanel.Controls.Add(Me.btnMatch)
         Me.ComparisonPanel.Controls.Add(Me.btnSave)
         Me.ComparisonPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -163,42 +164,48 @@ Partial Class Form1
         Me.ComparisonPanel.TabIndex = 14
         Me.ComparisonPanel.Visible = False
         '
+        'lblMatched
+        '
+        Me.lblMatched.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.lblMatched.Location = New System.Drawing.Point(325, 354)
+        Me.lblMatched.Name = "lblMatched"
+        Me.lblMatched.Size = New System.Drawing.Size(150, 13)
+        Me.lblMatched.TabIndex = 7
+        Me.lblMatched.Text = "Matched: 0/0"
+        Me.lblMatched.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblMatched.Visible = False
+        '
+        'btnMatch
+        '
+        Me.btnMatch.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.btnMatch.Location = New System.Drawing.Point(362, 328)
+        Me.btnMatch.Name = "btnMatch"
+        Me.btnMatch.Size = New System.Drawing.Size(75, 23)
+        Me.btnMatch.TabIndex = 4
+        Me.btnMatch.Text = "Match"
+        Me.btnMatch.UseVisualStyleBackColor = True
+        '
+        'btnSave
+        '
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSave.Enabled = False
+        Me.btnSave.Location = New System.Drawing.Point(670, 394)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(75, 23)
+        Me.btnSave.TabIndex = 4
+        Me.btnSave.Text = "Save"
+        Me.btnSave.UseVisualStyleBackColor = True
+        '
         'tcRight
         '
-        Me.tcRight.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tcRight.Controls.Add(Me.tabMatched2)
         Me.tcRight.Controls.Add(Me.tabUnmatched2)
-        Me.tcRight.Location = New System.Drawing.Point(411, 12)
+        Me.tcRight.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tcRight.Location = New System.Drawing.Point(371, 3)
         Me.tcRight.Name = "tcRight"
         Me.tcRight.SelectedIndex = 0
-        Me.tcRight.Size = New System.Drawing.Size(357, 295)
+        Me.tcRight.Size = New System.Drawing.Size(363, 294)
         Me.tcRight.TabIndex = 6
-        '
-        'tabMatched2
-        '
-        Me.tabMatched2.AutoScroll = True
-        Me.tabMatched2.Controls.Add(Me.dgMatchedRight)
-        Me.tabMatched2.Location = New System.Drawing.Point(4, 22)
-        Me.tabMatched2.Name = "tabMatched2"
-        Me.tabMatched2.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabMatched2.Size = New System.Drawing.Size(349, 269)
-        Me.tabMatched2.TabIndex = 0
-        Me.tabMatched2.Text = "Matched"
-        Me.tabMatched2.UseVisualStyleBackColor = True
-        '
-        'dgMatchedRight
-        '
-        Me.dgMatchedRight.AllowUserToAddRows = False
-        Me.dgMatchedRight.AllowUserToDeleteRows = False
-        Me.dgMatchedRight.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        Me.dgMatchedRight.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgMatchedRight.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgMatchedRight.Location = New System.Drawing.Point(3, 3)
-        Me.dgMatchedRight.Name = "dgMatchedRight"
-        Me.dgMatchedRight.RowHeadersVisible = False
-        Me.dgMatchedRight.Size = New System.Drawing.Size(343, 263)
-        Me.dgMatchedRight.TabIndex = 0
         '
         'tabUnmatched2
         '
@@ -225,42 +232,41 @@ Partial Class Form1
         Me.dgUnmatchedRight.Size = New System.Drawing.Size(343, 263)
         Me.dgUnmatchedRight.TabIndex = 0
         '
+        'tabMatched2
+        '
+        Me.tabMatched2.AutoScroll = True
+        Me.tabMatched2.Controls.Add(Me.dgMatchedRight)
+        Me.tabMatched2.Location = New System.Drawing.Point(4, 22)
+        Me.tabMatched2.Name = "tabMatched2"
+        Me.tabMatched2.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabMatched2.Size = New System.Drawing.Size(355, 268)
+        Me.tabMatched2.TabIndex = 0
+        Me.tabMatched2.Text = "Matched"
+        Me.tabMatched2.UseVisualStyleBackColor = True
+        '
+        'dgMatchedRight
+        '
+        Me.dgMatchedRight.AllowUserToAddRows = False
+        Me.dgMatchedRight.AllowUserToDeleteRows = False
+        Me.dgMatchedRight.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.dgMatchedRight.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgMatchedRight.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgMatchedRight.Location = New System.Drawing.Point(3, 3)
+        Me.dgMatchedRight.Name = "dgMatchedRight"
+        Me.dgMatchedRight.RowHeadersVisible = False
+        Me.dgMatchedRight.Size = New System.Drawing.Size(349, 262)
+        Me.dgMatchedRight.TabIndex = 0
+        '
         'tcLeft
         '
-        Me.tcLeft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tcLeft.Controls.Add(Me.tabMatched1)
         Me.tcLeft.Controls.Add(Me.tabUnmatched1)
-        Me.tcLeft.Location = New System.Drawing.Point(31, 12)
+        Me.tcLeft.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tcLeft.Location = New System.Drawing.Point(3, 3)
         Me.tcLeft.Name = "tcLeft"
         Me.tcLeft.SelectedIndex = 0
-        Me.tcLeft.Size = New System.Drawing.Size(357, 295)
+        Me.tcLeft.Size = New System.Drawing.Size(362, 294)
         Me.tcLeft.TabIndex = 6
-        '
-        'tabMatched1
-        '
-        Me.tabMatched1.AutoScroll = True
-        Me.tabMatched1.Controls.Add(Me.dgMatchedLeft)
-        Me.tabMatched1.Location = New System.Drawing.Point(4, 22)
-        Me.tabMatched1.Name = "tabMatched1"
-        Me.tabMatched1.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabMatched1.Size = New System.Drawing.Size(349, 269)
-        Me.tabMatched1.TabIndex = 0
-        Me.tabMatched1.Text = "Matched"
-        Me.tabMatched1.UseVisualStyleBackColor = True
-        '
-        'dgMatchedLeft
-        '
-        Me.dgMatchedLeft.AllowUserToAddRows = False
-        Me.dgMatchedLeft.AllowUserToDeleteRows = False
-        Me.dgMatchedLeft.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        Me.dgMatchedLeft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgMatchedLeft.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgMatchedLeft.Location = New System.Drawing.Point(3, 3)
-        Me.dgMatchedLeft.Name = "dgMatchedLeft"
-        Me.dgMatchedLeft.RowHeadersVisible = False
-        Me.dgMatchedLeft.Size = New System.Drawing.Size(343, 263)
-        Me.dgMatchedLeft.TabIndex = 0
         '
         'tabUnmatched1
         '
@@ -286,39 +292,47 @@ Partial Class Form1
         Me.dgUnmatchedLeft.Size = New System.Drawing.Size(343, 263)
         Me.dgUnmatchedLeft.TabIndex = 0
         '
-        'btnMatch
+        'tabMatched1
         '
-        Me.btnMatch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.tabMatched1.AutoScroll = True
+        Me.tabMatched1.Controls.Add(Me.dgMatchedLeft)
+        Me.tabMatched1.Location = New System.Drawing.Point(4, 22)
+        Me.tabMatched1.Name = "tabMatched1"
+        Me.tabMatched1.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabMatched1.Size = New System.Drawing.Size(354, 268)
+        Me.tabMatched1.TabIndex = 0
+        Me.tabMatched1.Text = "Matched"
+        Me.tabMatched1.UseVisualStyleBackColor = True
+        '
+        'dgMatchedLeft
+        '
+        Me.dgMatchedLeft.AllowUserToAddRows = False
+        Me.dgMatchedLeft.AllowUserToDeleteRows = False
+        Me.dgMatchedLeft.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.dgMatchedLeft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgMatchedLeft.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgMatchedLeft.Location = New System.Drawing.Point(3, 3)
+        Me.dgMatchedLeft.Name = "dgMatchedLeft"
+        Me.dgMatchedLeft.RowHeadersVisible = False
+        Me.dgMatchedLeft.Size = New System.Drawing.Size(348, 262)
+        Me.dgMatchedLeft.TabIndex = 0
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnMatch.Location = New System.Drawing.Point(362, 328)
-        Me.btnMatch.Name = "btnMatch"
-        Me.btnMatch.Size = New System.Drawing.Size(75, 23)
-        Me.btnMatch.TabIndex = 4
-        Me.btnMatch.Text = "Match"
-        Me.btnMatch.UseVisualStyleBackColor = True
-        '
-        'btnSave
-        '
-        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSave.Enabled = False
-        Me.btnSave.Location = New System.Drawing.Point(670, 394)
-        Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(75, 23)
-        Me.btnSave.TabIndex = 4
-        Me.btnSave.Text = "Save"
-        Me.btnSave.UseVisualStyleBackColor = True
-        '
-        'lblMatched
-        '
-        Me.lblMatched.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblMatched.AutoSize = True
-        Me.lblMatched.Location = New System.Drawing.Point(363, 354)
-        Me.lblMatched.Name = "lblMatched"
-        Me.lblMatched.Size = New System.Drawing.Size(72, 13)
-        Me.lblMatched.TabIndex = 7
-        Me.lblMatched.Text = "Matched: 0/0"
-        Me.lblMatched.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.tcLeft, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.tcRight, 1, 0)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(31, 22)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 1
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(737, 300)
+        Me.TableLayoutPanel1.TabIndex = 8
         '
         'Form1
         '
@@ -334,17 +348,17 @@ Partial Class Form1
         Me.LaunchPanel.ResumeLayout(False)
         Me.LaunchPanel.PerformLayout()
         Me.ComparisonPanel.ResumeLayout(False)
-        Me.ComparisonPanel.PerformLayout()
         Me.tcRight.ResumeLayout(False)
-        Me.tabMatched2.ResumeLayout(False)
-        CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabUnmatched2.ResumeLayout(False)
         CType(Me.dgUnmatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tabMatched2.ResumeLayout(False)
+        CType(Me.dgMatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tcLeft.ResumeLayout(False)
-        Me.tabMatched1.ResumeLayout(False)
-        CType(Me.dgMatchedLeft, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabUnmatched1.ResumeLayout(False)
         CType(Me.dgUnmatchedLeft, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tabMatched1.ResumeLayout(False)
+        CType(Me.dgMatchedLeft, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -358,18 +372,19 @@ Partial Class Form1
     Friend WithEvents lblResults As Label
     Friend WithEvents btnBrowse2 As Button
     Friend WithEvents ComparisonPanel As Panel
-	Friend WithEvents tcLeft As TabControl
-	Friend WithEvents tabMatched1 As TabPage
-	Friend WithEvents tabUnmatched1 As TabPage
-	Friend WithEvents btnSave As Button
-	Friend WithEvents SaveFileDialog1 As SaveFileDialog
-	Friend WithEvents tcRight As TabControl
-	Friend WithEvents tabMatched2 As TabPage
-	Friend WithEvents tabUnmatched2 As TabPage
-	Friend WithEvents dgMatchedRight As DataGridView
-	Friend WithEvents dgUnmatchedRight As DataGridView
-	Friend WithEvents dgMatchedLeft As DataGridView
-	Friend WithEvents dgUnmatchedLeft As DataGridView
-	Friend WithEvents btnMatch As Button
+    Friend WithEvents btnSave As Button
+    Friend WithEvents SaveFileDialog1 As SaveFileDialog
+    Friend WithEvents btnMatch As Button
     Friend WithEvents lblMatched As Label
+    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
+    Friend WithEvents tcLeft As TabControl
+    Friend WithEvents tabMatched1 As TabPage
+    Friend WithEvents dgMatchedLeft As DataGridView
+    Friend WithEvents tabUnmatched1 As TabPage
+    Friend WithEvents dgUnmatchedLeft As DataGridView
+    Friend WithEvents tcRight As TabControl
+    Friend WithEvents tabMatched2 As TabPage
+    Friend WithEvents dgMatchedRight As DataGridView
+    Friend WithEvents tabUnmatched2 As TabPage
+    Friend WithEvents dgUnmatchedRight As DataGridView
 End Class
