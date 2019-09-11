@@ -1,4 +1,6 @@
 ﻿Imports System.ComponentModel
+Imports Equin.ApplicationFramework
+
 Public Class Form1
     Dim er As New ExcelReader   'Creates the excel reader
 
@@ -13,7 +15,7 @@ Public Class Form1
     Dim rightMatchedList As List(Of Student)
     Dim rightUnmatchedList As List(Of Student)
 
-    Dim bindings As List(Of BindingSource) = New List(Of BindingSource)()
+    Dim bindings As List(Of BindingListView(Of Student)) = New List(Of BindingListView(Of Student))()
 
     Private Sub btnBrowse1_Click(sender As Object, e As EventArgs) Handles btnBrowse1.Click
         With OpenFileDialog1                        'Opens a file browser dialog
@@ -75,15 +77,29 @@ Public Class Form1
         'Extract data from Excel
         originalResultsStudentList = er.Read_Excel(er.ResultsFilePath)
         leftUnmatchedList = New List(Of Student)(originalResultsStudentList)
-        bindings(0).DataSource = leftUnmatchedList
-        dgUnmatchedLeft.DataSource = bindings(0)
+        Dim blView As BindingListView(Of Student) = New BindingListView(Of Student)(leftUnmatchedList)
+        dgUnmatchedLeft.DataSource = blView
+        dgUnmatchedLeft.BindingContext = New BindingContext()
+        dgUnmatchedLeft.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgUnmatchedLeft.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgUnmatchedLeft.Columns(0).FillWeight = 2
+        dgUnmatchedLeft.Columns(1).FillWeight = 2
+        dgUnmatchedLeft.Columns(2).FillWeight = 2
+        dgUnmatchedLeft.Columns(3).FillWeight = 1
 
         originalStudentList = er.Read_Excel(er.StudentFilePath)
         totalStudents = originalStudentList.Count
         rightUnmatchedList = New List(Of Student)(originalStudentList)
-        bindings(1).DataSource = rightUnmatchedList
-        dgUnmatchedRight.DataSource = bindings(1)
-        bindings(1).DataSource = rightUnmatchedList.OrderBy(Function(x) x.FirstName).ToList()
+        Dim blView2 As BindingListView(Of Student) = New BindingListView(Of Student)(rightUnmatchedList)
+        dgUnmatchedRight.DataSource = blView2
+        dgUnmatchedRight.BindingContext = New BindingContext()
+        dgUnmatchedRight.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgUnmatchedRight.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgUnmatchedRight.Columns(0).FillWeight = 2
+        dgUnmatchedRight.Columns(1).FillWeight = 2
+        dgUnmatchedRight.Columns(2).FillWeight = 2
+        dgUnmatchedRight.Columns(3).FillWeight = 1
+        dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(1), ListSortDirection.Ascending)
 
         'Switch the current panel
         LaunchPanel.Hide()
@@ -91,10 +107,7 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        bindings.Add(New BindingSource)
-        bindings.Add(New BindingSource)
-        bindings.Add(New BindingSource)
-        bindings.Add(New BindingSource)
+
     End Sub
 
     Private Sub BtnMatch_Click(sender As Object, e As EventArgs) Handles btnMatch.Click
@@ -106,16 +119,31 @@ Public Class Form1
 
         leftMatchedList = New List(Of Student)
         AddIds(leftMatchedList, leftUnmatchedList, leftIds)
-        bindings(2).DataSource = leftMatchedList
-        dgMatchedLeft.DataSource = bindings(2)
-        bindings(2).DataSource = leftMatchedList.OrderBy(Function(x) x.FirstName).ToList()
+        Dim blView As BindingListView(Of Student) = New BindingListView(Of Student)(leftMatchedList)
+        dgMatchedLeft.AutoGenerateColumns = True
+        dgMatchedLeft.DataSource = blView
+        dgMatchedLeft.BindingContext = New BindingContext()
+        dgMatchedLeft.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgMatchedLeft.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgMatchedLeft.Columns(0).FillWeight = 2
+        dgMatchedLeft.Columns(1).FillWeight = 2
+        dgMatchedLeft.Columns(2).FillWeight = 2
+        dgMatchedLeft.Columns(3).FillWeight = 1
+
 
         rightMatchedList = New List(Of Student)
         AddIds(rightMatchedList, rightUnmatchedList, rightIds)
-        bindings(3).DataSource = rightMatchedList
-        dgMatchedRight.DataSource = bindings(3)
-        bindings(3).DataSource = rightMatchedList.OrderBy(Function(x) x.FirstName).ToList()
-
+        Dim blView2 As BindingListView(Of Student) = New BindingListView(Of Student)(rightMatchedList)
+        dgMatchedRight.AutoGenerateColumns = True
+        dgMatchedRight.DataSource = blView2
+        dgMatchedRight.BindingContext = New BindingContext()
+        dgMatchedRight.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgMatchedRight.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
+        dgMatchedRight.Columns(0).FillWeight = 2
+        dgMatchedRight.Columns(1).FillWeight = 2
+        dgMatchedRight.Columns(2).FillWeight = 2
+        dgMatchedRight.Columns(3).FillWeight = 1
+        dgMatchedLeft.Sort(dgMatchedLeft.Columns(1), ListSortDirection.Ascending)
 
         RemoveDataRange(dgUnmatchedLeft, leftIds)
         RemoveDataRange(dgUnmatchedRight, rightIds)
@@ -140,7 +168,7 @@ Public Class Form1
     Private Sub RemoveDataRange(dataGrid As DataGridView, ByVal ids As List(Of Integer))
 
         For index As Integer = dataGrid.Rows.Count - 1 To 0 Step -1
-            Dim student As Student = dataGrid.Rows(index).DataBoundItem
+            Dim student As Student = dataGrid.Rows(index).DataBoundItem.Object
             If ids.Contains(student.Id) Then
                 dataGrid.Rows.Remove(dataGrid.Rows(index))
             End If
@@ -171,5 +199,34 @@ Public Class Form1
 
     Private Sub Form1_ResizeEnd(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
         ResumeLayout(True)
+    End Sub
+
+    Private Sub DgMatchedLeft_Scroll(sender As Object, e As ScrollEventArgs) Handles dgMatchedLeft.Scroll
+        dgMatchedRight.FirstDisplayedScrollingRowIndex = dgMatchedLeft.FirstDisplayedScrollingRowIndex
+    End Sub
+
+    Private Sub DgMatchedRight_Scroll(sender As Object, e As ScrollEventArgs) Handles dgMatchedRight.Scroll
+        dgMatchedLeft.FirstDisplayedScrollingRowIndex = dgMatchedRight.FirstDisplayedScrollingRowIndex
+    End Sub
+
+    Private Sub DgMatchedLeft_Sorted(sender As Object, e As EventArgs) Handles dgMatchedLeft.Sorted
+        If dgMatchedRight.SortOrder <> Nothing Then
+            If dgMatchedRight.SortedColumn.Index <> dgMatchedLeft.SortedColumn.Index Or dgMatchedRight.SortOrder <> dgMatchedLeft.SortOrder Then
+                dgMatchedRight.Sort(dgMatchedRight.Columns(dgMatchedLeft.SortedColumn.Index), dgMatchedLeft.SortOrder - 1)
+            End If
+        Else
+            dgMatchedRight.Sort(dgMatchedRight.Columns(dgMatchedLeft.SortedColumn.Index), dgMatchedLeft.SortOrder - 1)
+        End If
+    End Sub
+
+    Private Sub DgMatchedRight_Sorted(sender As Object, e As EventArgs) Handles dgMatchedRight.Sorted
+        If dgMatchedLeft.SortOrder <> Nothing Then
+            If dgMatchedRight.SortedColumn.Index <> dgMatchedLeft.SortedColumn.Index Or dgMatchedRight.SortOrder <> dgMatchedLeft.SortOrder Then
+                dgMatchedLeft.Sort(dgMatchedLeft.Columns(dgMatchedRight.SortedColumn.Index), dgMatchedRight.SortOrder - 1)
+
+            End If
+        Else
+            dgMatchedLeft.Sort(dgMatchedLeft.Columns(dgMatchedRight.SortedColumn.Index), dgMatchedRight.SortOrder - 1)
+        End If
     End Sub
 End Class

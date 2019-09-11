@@ -28,6 +28,7 @@ Public Class Student
         _match = student.Match
     End Sub
 
+    <DisplayName("First Name")>
     Public Property FirstName As String
         Get
             Return _firstName
@@ -37,6 +38,7 @@ Public Class Student
         End Set
     End Property
 
+    <DisplayName("Last Name")>
     Public Property LastName As String
         Get
             Return _lastName
@@ -46,6 +48,7 @@ Public Class Student
         End Set
     End Property
 
+    <DisplayName("Student Number")>
     Public Property StudentNumber As String
         Get
             Return _studentNumber
