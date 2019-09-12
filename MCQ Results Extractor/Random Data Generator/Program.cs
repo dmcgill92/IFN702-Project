@@ -89,53 +89,64 @@ namespace Random_Data_Generator
 			workBook = xlApp.Workbooks.Add(Type.Missing);
 			workSheet = (Worksheet)workBook.ActiveSheet;
 			if (isDirty)
+            { 
 				workSheet.Name = "Results";
-			else
+                workSheet.Cells[1, 1] = "Student number";
+                workSheet.Cells[1, 2] = "Surname";
+                workSheet.Cells[1, 3] = "Initial";
+                workSheet.Cells[1, 4] = "Score";
+            }
+            else
+            { 
 				workSheet.Name = "Students";
+                workSheet.Cells[1, 1] = "Last Name";
+                workSheet.Cells[1, 2] = "First Name";
+                workSheet.Cells[1, 3] = "Username";
+                workSheet.Cells[1, 4] = "Exam [Total Pts: 100 Percentage]";
+            }
 
-			workSheet.Cells[1, 1] = "First Name";
-			workSheet.Cells[1, 2] = "Last Name";
-			workSheet.Cells[1, 3] = "Student Number";
-			workSheet.Cells[1, 4] = "Results";
+            Random rand = new Random();
 
-			Random random = new Random();
 			for (int iter = 0; iter < firstNames.Count; iter++)
 			{
-				int toChange = 0;
-				if (isDirty)
-				{
-					if (random.Next(0, 5) == 1)
-					{
-						toChange = random.Next(1, 4);
-					}
-				}
+                if(isDirty)
+                {
+                    if(rand.Next(0, 10) == 0)
+                    {
+                        workSheet.Cells[iter + 2, 1] = DistortData(studentNums[iter], false);
+                    }
+                    else
+                    {
+				        workSheet.Cells[iter + 2, 1] = studentNums[iter];
+                    }
 
-				workSheet.Cells[iter + 2, 1] = firstNames[iter];
-				if (toChange == 1)
-				{
-					string name = firstNames[iter];
-					name = DistortData(name, true);
-					Console.WriteLine(name);
-					workSheet.Cells[iter + 2, 1] = name;
-				}
-				workSheet.Cells[iter + 2, 2] = lastNames[iter];
-				if (toChange == 2)
-				{
-					string name = lastNames[iter];
-					name = DistortData(name, true);
-					Console.WriteLine(name);
-					workSheet.Cells[iter + 2, 2] = name;
-				}
-				workSheet.Cells[iter + 2, 3] = studentNums[iter];
-				if (toChange == 3)
-				{
-					string num = studentNums[iter];
-					num = DistortData(num, false);
-					Console.WriteLine(num);
-					workSheet.Cells[iter + 2, 3] = num;
-				}
-				if (isDirty)
+                    if(rand.Next(0, 10) == 0)
+                    {
+                        workSheet.Cells[iter + 2, 2] = DistortData(lastNames[iter], true).ToUpper();
+                    }
+                    else
+                    {
+				        workSheet.Cells[iter + 2, 2] = lastNames[iter].ToUpper();
+                    }
+
+                    if (rand.Next(0, 10) == 0)
+                    {
+                        workSheet.Cells[iter + 2, 3] = DistortData(firstNames[iter][0].ToString(), true).ToUpper();
+                    }
+                    else
+                    {
+                        workSheet.Cells[iter + 2, 3] = firstNames[iter][0].ToString().ToUpper();
+                    }
+
 					workSheet.Cells[iter + 2, 4] = results[iter];
+                }
+                else
+                {
+                    workSheet.Cells[iter + 2, 1] = lastNames[iter];
+                    workSheet.Cells[iter + 2, 2] = firstNames[iter];
+                    workSheet.Cells[iter + 2, 3] = "n" + studentNums[iter];
+                    workSheet.Cells[iter + 2, 4] = "";
+                }
 			}
 
 			workBook.SaveAs(path);
@@ -165,7 +176,8 @@ namespace Random_Data_Generator
 					{
 						if(isName)
 						{
-							temp[i] = (char)rand.Next('a', 'z');
+                            int num = rand.Next(0, 26);
+							temp[i] = (char)('a' + num);
 						}
 						else
 						{
