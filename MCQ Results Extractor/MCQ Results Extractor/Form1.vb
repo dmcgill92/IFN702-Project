@@ -3,6 +3,7 @@ Imports Equin.ApplicationFramework
 
 Public Class Form1
     Dim er As New ExcelReader   'Creates the excel reader
+    Dim dh As New DataHandler
 
     Dim numMatched As Integer
     Dim totalStudents As Integer
@@ -73,32 +74,19 @@ Public Class Form1
         tcLeft.TabPages.Remove(tabMatched1)
         tcRight.TabPages.Remove(tabMatched2)
 
-
         'Extract data from Excel
         originalResultsStudentList = er.Read_Excel(er.ResultsFilePath)
         leftUnmatchedList = New List(Of Student)(originalResultsStudentList)
-        Dim blView As BindingListView(Of Student) = New BindingListView(Of Student)(leftUnmatchedList)
-        dgUnmatchedLeft.DataSource = blView
-        dgUnmatchedLeft.BindingContext = New BindingContext()
+        dh.BindData(dgUnmatchedLeft, leftUnmatchedList)
         dgUnmatchedLeft.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
         dgUnmatchedLeft.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
-        dgUnmatchedLeft.Columns(0).FillWeight = 2
-        dgUnmatchedLeft.Columns(1).FillWeight = 2
-        dgUnmatchedLeft.Columns(2).FillWeight = 2
-        dgUnmatchedLeft.Columns(3).FillWeight = 1
 
         originalStudentList = er.Read_Excel(er.StudentFilePath)
         totalStudents = originalStudentList.Count
         rightUnmatchedList = New List(Of Student)(originalStudentList)
-        Dim blView2 As BindingListView(Of Student) = New BindingListView(Of Student)(rightUnmatchedList)
-        dgUnmatchedRight.DataSource = blView2
-        dgUnmatchedRight.BindingContext = New BindingContext()
+        dh.BindData(dgUnmatchedRight, rightUnmatchedList)
         dgUnmatchedRight.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
         dgUnmatchedRight.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
-        dgUnmatchedRight.Columns(0).FillWeight = 2
-        dgUnmatchedRight.Columns(1).FillWeight = 2
-        dgUnmatchedRight.Columns(2).FillWeight = 2
-        dgUnmatchedRight.Columns(3).FillWeight = 1
         dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(1), ListSortDirection.Ascending)
 
         'Switch the current panel
@@ -111,42 +99,26 @@ Public Class Form1
     End Sub
 
     Private Sub BtnMatch_Click(sender As Object, e As EventArgs) Handles btnMatch.Click
-
         Dim tempList As List(Of List(Of Integer)) = er.Full_Match(leftUnmatchedList, rightUnmatchedList)
         Dim leftIds As List(Of Integer) = tempList(0)
         Dim rightIds As List(Of Integer) = tempList(1)
         numMatched = rightIds.Count
 
         leftMatchedList = New List(Of Student)
-        AddIds(leftMatchedList, leftUnmatchedList, leftIds)
-        Dim blView As BindingListView(Of Student) = New BindingListView(Of Student)(leftMatchedList)
-        dgMatchedLeft.AutoGenerateColumns = True
-        dgMatchedLeft.DataSource = blView
-        dgMatchedLeft.BindingContext = New BindingContext()
+        dh.AddIds(leftMatchedList, leftUnmatchedList, leftIds)
+        dh.BindData(dgMatchedLeft, leftMatchedList)
         dgMatchedLeft.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
         dgMatchedLeft.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
-        dgMatchedLeft.Columns(0).FillWeight = 2
-        dgMatchedLeft.Columns(1).FillWeight = 2
-        dgMatchedLeft.Columns(2).FillWeight = 2
-        dgMatchedLeft.Columns(3).FillWeight = 1
-
 
         rightMatchedList = New List(Of Student)
-        AddIds(rightMatchedList, rightUnmatchedList, rightIds)
-        Dim blView2 As BindingListView(Of Student) = New BindingListView(Of Student)(rightMatchedList)
-        dgMatchedRight.AutoGenerateColumns = True
-        dgMatchedRight.DataSource = blView2
-        dgMatchedRight.BindingContext = New BindingContext()
+        dh.AddIds(rightMatchedList, rightUnmatchedList, rightIds)
+        dh.BindData(dgMatchedRight, rightMatchedList)
         dgMatchedRight.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
         dgMatchedRight.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
-        dgMatchedRight.Columns(0).FillWeight = 2
-        dgMatchedRight.Columns(1).FillWeight = 2
-        dgMatchedRight.Columns(2).FillWeight = 2
-        dgMatchedRight.Columns(3).FillWeight = 1
         dgMatchedLeft.Sort(dgMatchedLeft.Columns(1), ListSortDirection.Ascending)
 
-        RemoveDataRange(dgUnmatchedLeft, leftIds)
-        RemoveDataRange(dgUnmatchedRight, rightIds)
+        dh.RemoveDataRange(dgUnmatchedLeft, leftIds)
+        dh.RemoveDataRange(dgUnmatchedRight, rightIds)
 
         tcLeft.TabPages.Insert(0, tabMatched1)
         tcRight.TabPages.Insert(0, tabMatched2)
@@ -163,34 +135,6 @@ Public Class Form1
 
         tcLeft.SelectTab(index)
         tcRight.SelectTab(index)
-    End Sub
-
-    Private Sub RemoveDataRange(dataGrid As DataGridView, ByVal ids As List(Of Integer))
-
-        For index As Integer = dataGrid.Rows.Count - 1 To 0 Step -1
-            Dim student As Student = dataGrid.Rows(index).DataBoundItem.Object
-            If ids.Contains(student.Id) Then
-                dataGrid.Rows.Remove(dataGrid.Rows(index))
-            End If
-        Next
-    End Sub
-
-    Private Sub AddDataRange(dataGrid As DataGridView, fromGrid As DataGridView, ByVal ids As List(Of Integer))
-
-        For Each row As DataGridViewRow In fromGrid.Rows
-            Dim student As Student = row.DataBoundItem
-            If ids.Contains(student.Id) Then
-                dataGrid.Rows.Add(row)
-            End If
-        Next
-    End Sub
-
-    Private Sub AddIds(ByRef editList As List(Of Student), ByVal fromList As List(Of Student), ByVal ids As List(Of Integer))
-        For Each student As Student In fromList
-            If ids.Contains(student.Id) Then
-                editList.Add(student)
-            End If
-        Next
     End Sub
 
     Private Sub Form1_ResizeBegin(sender As Object, e As EventArgs) Handles MyBase.ResizeBegin

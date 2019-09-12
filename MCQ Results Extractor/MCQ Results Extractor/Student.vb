@@ -1,5 +1,4 @@
-﻿Imports MCQ_Results_Extractor
-Imports System.ComponentModel
+﻿Imports System.ComponentModel
 
 Public Class Student
     Dim _firstName As String

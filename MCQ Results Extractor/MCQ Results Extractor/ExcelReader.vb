@@ -1,17 +1,7 @@
-﻿Imports Excel = Microsoft.Office.Interop.Excel
-
-Imports OfficeOpenXml.Style
-Imports OfficeOpenXml
-Imports System
+﻿Imports OfficeOpenXml
 Imports System.IO
-Imports MCQ_Results_Extractor
 
 Friend Class ExcelReader
-    'Excel components
-    Dim xlApp As Excel.Application
-    Dim xlWorkBook As Excel.Workbook
-    Dim xlWorkSheet As Excel.Worksheet
-    Dim range As Excel.Range
     Public Event VariableChanged()
 
     'File locations
@@ -53,20 +43,56 @@ Friend Class ExcelReader
         End Set
     End Property
 
+    Public Function FindColumns(workSheet As ExcelWorksheet) As List(Of String)
+        Dim tempList As List(Of String) = New List(Of String)
+        tempList.Add("")
+        tempList.Add("")
+        tempList.Add("")
+        tempList.Add("")
+        Dim foundColumns As Integer = 0
+
+        Dim colCount As Integer = workSheet.Dimension.End.Column
+        Dim range As ExcelRange = workSheet.Cells(1, 1, 1, colCount)
+        For index As Integer = 1 To colCount + 1
+
+            If range(1, index).Address <> "" And range(1, index).Value <> Nothing Then
+                If range(1, index).Value.ToString() = "Initial" OrElse range(1, index).Value.ToString() = "First Name" Then
+                    tempList(0) = range(1, index).Address()(0).ToString()
+                    foundColumns += 1
+                ElseIf range(1, index).Value.ToString() = "Surname" OrElse range(1, index).Value.ToString() = "Last Name" Then
+                    tempList(1) = range(1, index).Address()(0).ToString()
+                    foundColumns += 1
+                ElseIf range(1, index).Value.ToString() = "Student number" OrElse range(1, index).Value.ToString() = "Username" Then
+                    tempList(2) = range(1, index).Address()(0).ToString()
+                    foundColumns += 1
+                ElseIf range(1, index).Value.ToString() = "Score" OrElse range(1, index).Value.ToString().Contains("Exam") Then
+                    tempList(3) = range(1, index).Address()(0).ToString()
+                    foundColumns += 1
+                End If
+            End If
+            If foundColumns = 4 Then
+                Exit For
+            End If
+        Next
+
+        Return tempList
+    End Function
+
     Public Function Read_Excel(ByVal sFile As String) As List(Of Student) 'Extracts the data from the excel file
         Dim file As FileInfo = New FileInfo(sFile)
         Dim xlPackage As New ExcelPackage(file)
 
-        Dim workSheet = xlPackage.Workbook.Worksheets(1)
+        Dim workSheet As ExcelWorksheet = xlPackage.Workbook.Worksheets(1)
         Dim rowCount As Integer = workSheet.Dimension.End.Row
+        Dim columnLetters As List(Of String) = FindColumns(workSheet)
 
         Dim tempList As List(Of Student) = New List(Of Student)
 
         For index As Integer = 2 To rowCount
-            Dim fName As String = workSheet.Cells("A" & index).Value.ToString
-            Dim lName As String = workSheet.Cells("B" & index).Value.ToString
-            Dim sNum As String = workSheet.Cells("C" & index).Value.ToString
-            Dim result As Integer = workSheet.Cells("D" & index).Value
+            Dim fName As String = workSheet.Cells(columnLetters(0) & index).Value.ToString
+            Dim lName As String = workSheet.Cells(columnLetters(1) & index).Value.ToString
+            Dim sNum As String = workSheet.Cells(columnLetters(2) & index).Value.ToString
+            Dim result As Integer = workSheet.Cells(columnLetters(3) & index).Value
             Dim id As Integer = index - 1
             Dim tempStudent As Student = New Student(fName, lName, sNum, result, id, Nothing)
 
