@@ -99,7 +99,9 @@ Public Class Form1
     End Sub
 
     Private Sub BtnMatch_Click(sender As Object, e As EventArgs) Handles btnMatch.Click
+        progressFullMatch.Visible = True
         Dim tempList As List(Of List(Of Integer)) = er.Full_Match(leftUnmatchedList, rightUnmatchedList)
+        progressFullMatch.Visible = False
         Dim leftIds As List(Of Integer) = tempList(0)
         Dim rightIds As List(Of Integer) = tempList(1)
         numMatched = rightIds.Count

@@ -65,7 +65,7 @@ Friend Class ExcelReader
                 ElseIf range(1, index).Value.ToString() = "Student number" OrElse range(1, index).Value.ToString() = "Username" Then
                     tempList(2) = range(1, index).Address()(0).ToString()
                     foundColumns += 1
-                ElseIf range(1, index).Value.ToString() = "Score" OrElse range(1, index).Value.ToString().Contains("Exam") Then
+                ElseIf range(1, index).Value.ToString() = "Score" OrElse range(1, index).Value.ToString().Contains("Total Pts") Then
                     tempList(3) = range(1, index).Address()(0).ToString()
                     foundColumns += 1
                 End If
@@ -89,10 +89,22 @@ Friend Class ExcelReader
         Dim tempList As List(Of Student) = New List(Of Student)
 
         For index As Integer = 2 To rowCount
-            Dim fName As String = workSheet.Cells(columnLetters(0) & index).Value.ToString
-            Dim lName As String = workSheet.Cells(columnLetters(1) & index).Value.ToString
-            Dim sNum As String = workSheet.Cells(columnLetters(2) & index).Value.ToString
-            Dim result As Integer = workSheet.Cells(columnLetters(3) & index).Value
+            Dim fname As String = ""
+            Dim lname As String = ""
+            Dim sNum As String = ""
+            Dim result As Integer = 0
+            If workSheet.Cells(columnLetters(0) & index).Value <> Nothing Then
+                fname = workSheet.Cells(columnLetters(0) & index).Value.ToString.TrimEnd
+            End If
+            If workSheet.Cells(columnLetters(1) & index).Value <> Nothing Then
+                lname = workSheet.Cells(columnLetters(1) & index).Value.ToString.TrimEnd
+            End If
+            If workSheet.Cells(columnLetters(2) & index).Value <> Nothing Then
+                sNum = workSheet.Cells(columnLetters(2) & index).Value.ToString.TrimEnd
+            End If
+            If workSheet.Cells(columnLetters(3) & index).Value <> Nothing Then
+                result = workSheet.Cells(columnLetters(3) & index).Value
+            End If
             Dim id As Integer = index - 1
             Dim tempStudent As Student = New Student(fName, lName, sNum, result, id, Nothing)
 
@@ -112,15 +124,18 @@ Friend Class ExcelReader
         For Each rStudent As Student In resultsFile
             isMatch = True
             For Each student As Student In studentFile
-                If rStudent.FirstName.ToLower() <> student.FirstName(0).ToString().ToLower() Then
+                If rStudent.FirstName = "" OrElse rStudent.FirstName(0).ToString().ToLower() <> student.FirstName(0).ToString().ToLower() Then
+                    Console.WriteLine("{0} : {1}", rStudent.FirstName, student.FirstName)
                     isMatch = False
                     Continue For
                 End If
                 If rStudent.LastName.ToLower() <> student.LastName.ToLower() Then
+                    Console.WriteLine("{0} : {1}", rStudent.LastName, student.LastName)
                     isMatch = False
                     Continue For
                 End If
                 If "n" & rStudent.StudentNumber <> student.StudentNumber Then
+                    Console.WriteLine("{0} : {1}", rStudent.StudentNumber, student.StudentNumber)
                     isMatch = False
                     Continue For
                 End If
@@ -139,6 +154,7 @@ Friend Class ExcelReader
         tempList.Add(sRemoveList)
         Return tempList
     End Function
+
     Private Sub Validate_File_Locations() Handles Me.VariableChanged    'Activates the continue button when all file locations are input and valid
         Form1.btnContinue.Enabled = Not (_resultsFilePath = String.Empty OrElse _studentFilePath = String.Empty)
     End Sub
