@@ -112,15 +112,15 @@ Friend Class ExcelReader
         For Each rStudent As Student In resultsFile
             isMatch = True
             For Each student As Student In studentFile
-                If rStudent.FirstName <> student.FirstName Then
+                If rStudent.FirstName.ToLower() <> student.FirstName(0).ToString().ToLower() Then
                     isMatch = False
                     Continue For
                 End If
-                If rStudent.LastName <> student.LastName Then
+                If rStudent.LastName.ToLower() <> student.LastName.ToLower() Then
                     isMatch = False
                     Continue For
                 End If
-                If rStudent.StudentNumber <> student.StudentNumber Then
+                If "n" & rStudent.StudentNumber <> student.StudentNumber Then
                     isMatch = False
                     Continue For
                 End If
