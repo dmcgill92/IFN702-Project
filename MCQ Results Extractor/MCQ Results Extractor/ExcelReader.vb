@@ -155,6 +155,70 @@ Friend Class ExcelReader
         Return tempList
     End Function
 
+    Public Function Partial_Match_Similarity(studentA As Student, studentList As List(Of Student)) As List(Of Single)
+        Dim simList As List(Of Single) = New List(Of Single)
+        For Each studentB As Student In studentList
+            Dim fnA = (If(studentA.FirstName.Length > 0, studentA.FirstName(0).ToString().ToLower(), ""))
+            Dim fnB = (If(studentB.FirstName.Length > 0, studentB.FirstName(0).ToString().ToLower(), ""))
+            Dim fnSim As Single = (If(fnA = fnB, 1, 0))
+            Console.WriteLine("{0} : {1} - Match = {2}", fnA, fnB, fnSim)
+            Dim lnA = studentA.LastName.ToLower()
+            Dim lnB = studentB.LastName.ToLower()
+            Dim lnSim As Single = GetSimilarity(lnA, lnB)
+            Console.WriteLine("{0} : {1} - Match = {2}", lnA, lnB, lnSim)
+            Dim snA = "n" & studentA.StudentNumber
+            Dim snB = studentB.StudentNumber
+            Dim snSim As Single = GetSimilarity(snA, snB)
+            Console.WriteLine("{0} : {1} - Match = {2}", snA, snB, snSim)
+            Dim totalSim As Single = (fnSim + lnSim + snSim) / 3
+            simList.Add(totalSim)
+            Console.WriteLine("{0} : {1} - Match = {2}", studentA.LastName, studentB.LastName, totalSim)
+        Next
+        Return simList
+    End Function
+
+    Public Function GetSimilarity(stringA As String, stringB As String) As Single
+        Dim distance As Single = ComputeDistance(stringA, stringB)
+        Dim maxLen As Single = System.Math.Max(stringA.Length, stringB.Length)
+        If maxLen = 0.0F Then
+            Return 1.0F
+        Else
+            Return 1.0F - distance / maxLen
+        End If
+    End Function
+
+    Private Function ComputeDistance(s As String, t As String) As Integer
+        Dim n As Integer = s.Length
+        Dim m As Integer = t.Length
+        Dim distance As Integer(,) = New Integer(n, m) {}
+        Dim cost As Integer = 0
+
+        If n = 0 Then
+            Return m
+        End If
+        If m = 0 Then
+            Return n
+        End If
+
+        Dim i As Integer = 0
+        While i <= n
+            distance(i, 0) = Math.Max(Threading.Interlocked.Increment(i), i - 1)
+        End While
+
+        Dim j As Integer = 0
+        While j <= m
+            distance(0, j) = Math.Max(Threading.Interlocked.Increment(j), j - 1)
+        End While
+
+        For i = 1 To n
+            For j = 1 To m
+                cost = (If(t.Substring(j - 1, 1) = s.Substring(i - 1, 1), 0, 1))
+                distance(i, j) = Math.Min(distance(i - 1, j) + 1, Math.Min(distance(i, j - 1) + 1, distance(i - 1, j - 1) + cost))
+            Next
+        Next
+        Return distance(n, m)
+    End Function
+
     Private Sub Validate_File_Locations() Handles Me.VariableChanged    'Activates the continue button when all file locations are input and valid
         Form1.btnContinue.Enabled = Not (_resultsFilePath = String.Empty OrElse _studentFilePath = String.Empty)
     End Sub

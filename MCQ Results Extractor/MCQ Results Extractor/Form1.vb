@@ -99,9 +99,7 @@ Public Class Form1
     End Sub
 
     Private Sub BtnMatch_Click(sender As Object, e As EventArgs) Handles btnMatch.Click
-        progressFullMatch.Visible = True
         Dim tempList As List(Of List(Of Integer)) = er.Full_Match(leftUnmatchedList, rightUnmatchedList)
-        progressFullMatch.Visible = False
         Dim leftIds As List(Of Integer) = tempList(0)
         Dim rightIds As List(Of Integer) = tempList(1)
         numMatched = rightIds.Count
@@ -174,5 +172,12 @@ Public Class Form1
         Else
             dgMatchedLeft.Sort(dgMatchedLeft.Columns(dgMatchedRight.SortedColumn.Index), dgMatchedRight.SortOrder - 1)
         End If
+    End Sub
+
+    Private Sub DgUnmatchedLeft_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnmatchedLeft.CellClick
+        Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
+        Dim selectedStudent As Student = row.DataBoundItem.Object
+        Dim simList As List(Of Single) = er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+        'dh.SetSimilarity(simList)
     End Sub
 End Class

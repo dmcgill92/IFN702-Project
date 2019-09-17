@@ -37,4 +37,8 @@ Public Class DataHandler
         dataGrid.Columns(2).FillWeight = 2
         dataGrid.Columns(3).FillWeight = 1
     End Sub
+
+    Public Sub SetSimilarity(simList As List(Of Single))
+
+    End Sub
 End Class
