@@ -36,9 +36,10 @@ Public Class DataHandler
         dataGrid.Columns(1).FillWeight = 2
         dataGrid.Columns(2).FillWeight = 2
         dataGrid.Columns(3).FillWeight = 1
+        dataGrid.Columns(4).Visible = False
     End Sub
 
-    Public Sub SetSimilarity(simList As List(Of Single))
+    Public Sub ConfirmMatch(student As Student, removeGrid As DataGridView, addGrid As DataGridView)
 
     End Sub
 End Class

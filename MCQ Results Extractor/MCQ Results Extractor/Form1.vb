@@ -124,15 +124,29 @@ Public Class Form1
         tcRight.TabPages.Insert(0, tabMatched2)
         tcLeft.SelectTab(tabMatched1)
         tcRight.SelectTab(tabMatched2)
+
+        dgUnmatchedRight.Columns(4).Visible = True
+        dgUnmatchedRight.Columns(4).AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader
+        dgUnmatchedRight.Columns(4).DefaultCellStyle.Format = "0.##%"
+
+        Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
+        Dim selectedStudent As Student = row.DataBoundItem.Object
+        er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+        dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+
         lblMatched.Visible = True
         lblMatched.Text = "Matched: " & numMatched & "/" & totalStudents
-        btnMatch.Enabled = False
+        btnMatch.Visible = False
     End Sub
 
     Private Sub tabControl_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles tcLeft.SelectedIndexChanged, tcRight.SelectedIndexChanged
         Dim tabControl As TabControl = CType(sender, TabControl)
         Dim index As Integer = tabControl.SelectedIndex
-
+        If index = 1 Then
+            btnConfirm.Visible = True
+        Else
+            btnConfirm.Visible = False
+        End If
         tcLeft.SelectTab(index)
         tcRight.SelectTab(index)
     End Sub
@@ -177,7 +191,11 @@ Public Class Form1
     Private Sub DgUnmatchedLeft_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnmatchedLeft.CellClick
         Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
         Dim selectedStudent As Student = row.DataBoundItem.Object
-        Dim simList As List(Of Single) = er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
-        'dh.SetSimilarity(simList)
+        er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+        dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+    End Sub
+
+    Private Sub BtnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
+
     End Sub
 End Class

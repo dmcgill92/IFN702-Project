@@ -47,6 +47,7 @@ Partial Class Form1
         Me.btnMatch = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.btnConfirm = New System.Windows.Forms.Button()
         Me.LaunchPanel.SuspendLayout()
         Me.ComparisonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -153,6 +154,7 @@ Partial Class Form1
         '
         'ComparisonPanel
         '
+        Me.ComparisonPanel.Controls.Add(Me.btnConfirm)
         Me.ComparisonPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.ComparisonPanel.Controls.Add(Me.lblMatched)
         Me.ComparisonPanel.Controls.Add(Me.btnMatch)
@@ -354,6 +356,17 @@ Partial Class Form1
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
         '
+        'btnConfirm
+        '
+        Me.btnConfirm.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.btnConfirm.Location = New System.Drawing.Point(358, 328)
+        Me.btnConfirm.Name = "btnConfirm"
+        Me.btnConfirm.Size = New System.Drawing.Size(85, 23)
+        Me.btnConfirm.TabIndex = 9
+        Me.btnConfirm.Text = "Confirm Match"
+        Me.btnConfirm.UseVisualStyleBackColor = True
+        Me.btnConfirm.Visible = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -407,4 +420,5 @@ Partial Class Form1
     Friend WithEvents dgMatchedRight As DataGridView
     Friend WithEvents tabUnmatched2 As TabPage
     Friend WithEvents dgUnmatchedRight As DataGridView
+    Friend WithEvents btnConfirm As Button
 End Class

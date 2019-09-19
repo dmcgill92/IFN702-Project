@@ -7,14 +7,14 @@ Public Class Student
     Dim _result As Integer
     Dim _id As Integer
 
-    Dim _match As Student
+    Dim _match As Single
 
-    Public Sub New(firstName As String, lastName As String, studentNumber As String, result As Integer, id As Integer, match As Student)
+    Public Sub New(firstName As String, lastName As String, studentNumber As String, result As Integer, id As Integer, match As Single)
         _firstName = firstName
         _lastName = lastName
         _studentNumber = studentNumber
         _result = result
-        Me.Id = id
+        _id = id
         _match = match
     End Sub
 
@@ -66,12 +66,12 @@ Public Class Student
         End Set
     End Property
 
-    <Browsable(False)>
-    Public Property Match As Student
+    <DisplayName("Match %")>
+    Public Property Match As Single
         Get
             Return _match
         End Get
-        Set(value As Student)
+        Set(value As Single)
             _match = value
         End Set
     End Property

@@ -125,17 +125,17 @@ Friend Class ExcelReader
             isMatch = True
             For Each student As Student In studentFile
                 If rStudent.FirstName = "" OrElse rStudent.FirstName(0).ToString().ToLower() <> student.FirstName(0).ToString().ToLower() Then
-                    Console.WriteLine("{0} : {1}", rStudent.FirstName, student.FirstName)
+                    'Console.WriteLine("{0} : {1}", rStudent.FirstName, student.FirstName)
                     isMatch = False
                     Continue For
                 End If
                 If rStudent.LastName.ToLower() <> student.LastName.ToLower() Then
-                    Console.WriteLine("{0} : {1}", rStudent.LastName, student.LastName)
+                    'Console.WriteLine("{0} : {1}", rStudent.LastName, student.LastName)
                     isMatch = False
                     Continue For
                 End If
                 If "n" & rStudent.StudentNumber <> student.StudentNumber Then
-                    Console.WriteLine("{0} : {1}", rStudent.StudentNumber, student.StudentNumber)
+                    'Console.WriteLine("{0} : {1}", rStudent.StudentNumber, student.StudentNumber)
                     isMatch = False
                     Continue For
                 End If
@@ -155,31 +155,33 @@ Friend Class ExcelReader
         Return tempList
     End Function
 
-    Public Function Partial_Match_Similarity(studentA As Student, studentList As List(Of Student)) As List(Of Single)
+    Public Sub Partial_Match_Similarity(studentA As Student, studentList As List(Of Student))
         Dim simList As List(Of Single) = New List(Of Single)
         For Each studentB As Student In studentList
             Dim fnA = (If(studentA.FirstName.Length > 0, studentA.FirstName(0).ToString().ToLower(), ""))
             Dim fnB = (If(studentB.FirstName.Length > 0, studentB.FirstName(0).ToString().ToLower(), ""))
             Dim fnSim As Single = (If(fnA = fnB, 1, 0))
-            Console.WriteLine("{0} : {1} - Match = {2}", fnA, fnB, fnSim)
+            'Console.WriteLine("{0} : {1} - Match = {2}", fnA, fnB, fnSim)
             Dim lnA = studentA.LastName.ToLower()
             Dim lnB = studentB.LastName.ToLower()
             Dim lnSim As Single = GetSimilarity(lnA, lnB)
-            Console.WriteLine("{0} : {1} - Match = {2}", lnA, lnB, lnSim)
+            'Console.WriteLine("{0} : {1} - Match = {2}", lnA, lnB, lnSim)
             Dim snA = "n" & studentA.StudentNumber
             Dim snB = studentB.StudentNumber
             Dim snSim As Single = GetSimilarity(snA, snB)
-            Console.WriteLine("{0} : {1} - Match = {2}", snA, snB, snSim)
-            Dim totalSim As Single = (fnSim + lnSim + snSim) / 3
-            simList.Add(totalSim)
-            Console.WriteLine("{0} : {1} - Match = {2}", studentA.LastName, studentB.LastName, totalSim)
+            'Console.WriteLine("{0} : {1} - Match = {2}", snA, snB, snSim)
+            Dim totalSim As Single = (fnSim + (lnSim * 2) + (snSim * 3)) / 6
+            studentB.Match = totalSim
+            'Console.WriteLine("{0} : {1} - Match = {2}%", studentA.LastName, studentB.LastName, (totalSim * 100).ToString("N2"))
         Next
-        Return simList
-    End Function
+    End Sub
 
     Public Function GetSimilarity(stringA As String, stringB As String) As Single
         Dim distance As Single = ComputeDistance(stringA, stringB)
-        Dim maxLen As Single = System.Math.Max(stringA.Length, stringB.Length)
+        Dim maxLen As Single = stringA.Length
+        If maxLen < stringB.Length Then
+            maxLen = stringB.Length
+        End If
         If maxLen = 0.0F Then
             Return 1.0F
         Else
@@ -202,12 +204,12 @@ Friend Class ExcelReader
 
         Dim i As Integer = 0
         While i <= n
-            distance(i, 0) = Math.Max(Threading.Interlocked.Increment(i), i - 1)
+            distance(i, 0) = Math.Min(Threading.Interlocked.Increment(i), i - 1)
         End While
 
         Dim j As Integer = 0
         While j <= m
-            distance(0, j) = Math.Max(Threading.Interlocked.Increment(j), j - 1)
+            distance(0, j) = Math.Min(Threading.Interlocked.Increment(j), j - 1)
         End While
 
         For i = 1 To n
@@ -216,6 +218,14 @@ Friend Class ExcelReader
                 distance(i, j) = Math.Min(distance(i - 1, j) + 1, Math.Min(distance(i, j - 1) + 1, distance(i - 1, j - 1) + cost))
             Next
         Next
+
+        'For x As Integer = 0 To m
+        '    For y As Integer = 0 To n
+        '        Console.Write("{0} ", distance(y, x))
+        '    Next
+        '    Console.WriteLine()
+        'Next
+
         Return distance(n, m)
     End Function
 
