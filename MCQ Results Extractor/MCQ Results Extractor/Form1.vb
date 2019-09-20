@@ -102,7 +102,6 @@ Public Class Form1
         Dim tempList As List(Of List(Of Integer)) = er.Full_Match(leftUnmatchedList, rightUnmatchedList)
         Dim leftIds As List(Of Integer) = tempList(0)
         Dim rightIds As List(Of Integer) = tempList(1)
-        numMatched = rightIds.Count
 
         leftMatchedList = New List(Of Student)
         dh.AddIds(leftMatchedList, leftUnmatchedList, leftIds)
@@ -135,7 +134,7 @@ Public Class Form1
         dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
 
         lblMatched.Visible = True
-        lblMatched.Text = "Matched: " & numMatched & "/" & totalStudents
+        UpdateMatchCount()
         btnMatch.Visible = False
     End Sub
 
@@ -196,6 +195,27 @@ Public Class Form1
     End Sub
 
     Private Sub BtnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
+        Dim studentA As Student = dgUnmatchedLeft.SelectedRows(0).DataBoundItem.Object
+        dh.RemoveFromGrid(studentA, dgUnmatchedLeft, leftUnmatchedList)
+        dh.AddToGrid(studentA, dgMatchedLeft, leftMatchedList)
 
+        Dim studentB As Student = dgUnmatchedRight.SelectedRows(0).DataBoundItem.Object
+        dh.RemoveFromGrid(studentB, dgUnmatchedRight, rightUnmatchedList)
+        studentB.Result = studentA.Result
+        dh.AddToGrid(studentB, dgMatchedRight, rightMatchedList)
     End Sub
+
+    Private Sub DgMatchedLeft_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgMatchedLeft.RowsAdded
+        UpdateMatchCount()
+    End Sub
+
+    Private Sub DgMatchedLeft_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgMatchedLeft.RowsRemoved
+        UpdateMatchCount()
+    End Sub
+
+    Private Sub UpdateMatchCount()
+        numMatched = dgMatchedLeft.Rows.Count
+        lblMatched.Text = "Matched: " & numMatched & "/" & totalStudents
+    End Sub
+
 End Class

@@ -1,11 +1,13 @@
-﻿Imports OfficeOpenXml
-Imports System.IO
+﻿Imports System.IO
+Imports OfficeOpenXml
 
 Friend Class ExcelReader
+
     Public Event VariableChanged()
 
     'File locations
     Dim _resultsFilePath As String
+
     Dim _studentFilePath As String
     Dim _outputFilePath As String         'Where the output is saved
 
@@ -106,8 +108,7 @@ Friend Class ExcelReader
                 result = workSheet.Cells(columnLetters(3) & index).Value
             End If
             Dim id As Integer = index - 1
-            Dim tempStudent As Student = New Student(fName, lName, sNum, result, id, Nothing)
-
+            Dim tempStudent As Student = New Student(fname, lname, sNum, result, id, Nothing)
 
             tempList.Add(tempStudent)
         Next
@@ -232,4 +233,5 @@ Friend Class ExcelReader
     Private Sub Validate_File_Locations() Handles Me.VariableChanged    'Activates the continue button when all file locations are input and valid
         Form1.btnContinue.Enabled = Not (_resultsFilePath = String.Empty OrElse _studentFilePath = String.Empty)
     End Sub
+
 End Class

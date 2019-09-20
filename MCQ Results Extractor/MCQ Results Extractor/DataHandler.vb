@@ -1,6 +1,7 @@
 ﻿Imports Equin.ApplicationFramework
 
 Public Class DataHandler
+
     Public Sub RemoveDataRange(dataGrid As DataGridView, ByVal ids As List(Of Integer))
         For index As Integer = dataGrid.Rows.Count - 1 To 0 Step -1
             Dim student As Student = dataGrid.Rows(index).DataBoundItem.Object
@@ -39,7 +40,29 @@ Public Class DataHandler
         dataGrid.Columns(4).Visible = False
     End Sub
 
-    Public Sub ConfirmMatch(student As Student, removeGrid As DataGridView, addGrid As DataGridView)
-
+    Public Sub AddToGrid(student As Student, grid As DataGridView, list As List(Of Student))
+        list.Add(student)
+        UpdateGrid(grid, list)
     End Sub
+
+    Public Sub RemoveFromGrid(student As Student, grid As DataGridView, list As List(Of Student))
+        list.Remove(student)
+        UpdateGrid(grid, list)
+    End Sub
+
+    Public Sub UpdateGrid(grid As DataGridView, list As List(Of Student))
+        Dim sortedOrder As SortOrder = grid.SortOrder
+        Dim sortColumnIndex As Integer = -1
+        If sortedOrder <> SortOrder.None Then
+            sortColumnIndex = grid.SortedColumn.Index
+        End If
+        Dim bindListView As BindingListView(Of Student) = New BindingListView(Of Student)(list)
+        grid.DataSource = bindListView
+        grid.BindingContext = New BindingContext()
+        If sortedOrder = SortOrder.None Then
+            Return
+        End If
+        grid.Sort(grid.Columns(sortColumnIndex), sortedOrder - 1)
+    End Sub
+
 End Class
