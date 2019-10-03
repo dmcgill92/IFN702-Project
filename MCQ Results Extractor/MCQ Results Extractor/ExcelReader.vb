@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports OfficeOpenXml
+Imports Microsoft.VisualBasic.FileIO
 
 Friend Class ExcelReader
 
@@ -81,39 +82,74 @@ Friend Class ExcelReader
     End Function
 
     Public Function Read_Excel(ByVal sFile As String) As List(Of Student) 'Extracts the data from the excel file
-        Dim file As FileInfo = New FileInfo(sFile)
-        Dim xlPackage As New ExcelPackage(file)
-
-        Dim workSheet As ExcelWorksheet = xlPackage.Workbook.Worksheets(1)
-        Dim rowCount As Integer = workSheet.Dimension.End.Row
-        Dim columnLetters As List(Of String) = FindColumns(workSheet)
-
         Dim tempList As List(Of Student) = New List(Of Student)
+		If Path.GetExtension(sFile) <> ".csv" Then
+			Dim file As FileInfo = New FileInfo(sFile)
+			Dim xlPackage As New ExcelPackage(file)
 
-        For index As Integer = 2 To rowCount
-            Dim fname As String = ""
-            Dim lname As String = ""
-            Dim sNum As String = ""
-            Dim result As Integer = 0
-            If workSheet.Cells(columnLetters(0) & index).Value <> Nothing Then
-                fname = workSheet.Cells(columnLetters(0) & index).Value.ToString.TrimEnd
-            End If
-            If workSheet.Cells(columnLetters(1) & index).Value <> Nothing Then
-                lname = workSheet.Cells(columnLetters(1) & index).Value.ToString.TrimEnd
-            End If
-            If workSheet.Cells(columnLetters(2) & index).Value <> Nothing Then
-                sNum = workSheet.Cells(columnLetters(2) & index).Value.ToString.TrimEnd
-            End If
-            If workSheet.Cells(columnLetters(3) & index).Value <> Nothing Then
-                result = workSheet.Cells(columnLetters(3) & index).Value
-            End If
-            Dim id As Integer = index - 1
-            Dim tempStudent As Student = New Student(fname, lname, sNum, result, id, Nothing, Nothing, Nothing)
+			Dim workSheet As ExcelWorksheet = xlPackage.Workbook.Worksheets(1)
+			Dim rowCount As Integer = workSheet.Dimension.End.Row
+			Dim columnLetters As List(Of String) = FindColumns(workSheet)
 
-            tempList.Add(tempStudent)
-        Next
+			For index As Integer = 2 To rowCount
+				Dim fname As String = ""
+				Dim lname As String = ""
+				Dim sNum As String = ""
+				Dim result As Integer = 0
+				If workSheet.Cells(columnLetters(0) & index).Value <> Nothing Then
+					fname = workSheet.Cells(columnLetters(0) & index).Value.ToString.TrimEnd
+				End If
+				If workSheet.Cells(columnLetters(1) & index).Value <> Nothing Then
+					lname = workSheet.Cells(columnLetters(1) & index).Value.ToString.TrimEnd
+				End If
+				If workSheet.Cells(columnLetters(2) & index).Value <> Nothing Then
+					sNum = workSheet.Cells(columnLetters(2) & index).Value.ToString.TrimEnd
+				End If
+				If workSheet.Cells(columnLetters(3) & index).Value <> Nothing Then
+					result = workSheet.Cells(columnLetters(3) & index).Value
+				End If
+				Dim id As Integer = index - 1
+				Dim tempStudent As Student = New Student(fname, lname, sNum, result, id, Nothing, Nothing, Nothing)
 
-        xlPackage.Dispose()
+				tempList.Add(tempStudent)
+			Next
+
+			xlPackage.Dispose()
+		Else
+			Dim dataIndices As Integer() = New Integer(3) {}
+			Dim foundColumns As Integer = 0
+			Dim tfp As New TextFieldParser(sFile)
+			tfp.Delimiters = New String() {","}
+			tfp.TextFieldType = FieldType.Delimited
+
+			Dim headers As String() = tfp.ReadFields()
+			For index As Integer = 0 To headers.Count
+				If headers(index) <> "" And headers(index) <> Nothing Then
+					If headers(index) = "Initial" OrElse headers(index) = "First Name" Then
+						dataIndices(0) = index
+						foundColumns += 1
+					ElseIf headers(index) = "Surname" OrElse headers(index) = "Last Name" Then
+						dataIndices(1) = index
+						foundColumns += 1
+					ElseIf headers(index) = "Student number" OrElse headers(index) = "Username" Then
+						dataIndices(2) = index
+						foundColumns += 1
+					ElseIf headers(index) = "Score" OrElse headers(index).Contains("Total Pts") Then
+						dataIndices(3) = index
+						foundColumns += 1
+					End If
+				End If
+				If foundColumns = 4 Then
+					Exit For
+				End If
+			Next
+
+			While tfp.EndOfData = False
+				Dim fields As String() = tfp.ReadFields()
+				Dim tempStudent = New Student(fields(dataIndices(0)), fields(dataIndices(1)), fields(dataIndices(2)), fields(dataIndices(3)), tempList.Count + 1, Nothing, Nothing, Nothing)
+				tempList.Add(tempStudent)
+			End While
+		End If
         Return tempList
     End Function
 
@@ -150,29 +186,30 @@ Friend Class ExcelReader
         Return Nothing
     End Function
 
-    Public Sub Partial_Match_Similarity(studentA As Student, studentList As List(Of Student))
+	Public Function Partial_Match_Similarity(studentA As Student, studentList As List(Of Student)) As List(Of Single)
+		Dim simList As List(Of Single) = New List(Of Single)
+		For Each studentB As Student In studentList
+			Dim fnA = (If(studentA.FirstName.Length > 0, studentA.FirstName(0).ToString().ToLower(), ""))
+			Dim fnB = (If(studentB.FirstName.Length > 0, studentB.FirstName(0).ToString().ToLower(), ""))
+			Dim fnSim As Single = (If(fnA = fnB, 1, 0))
+			'Console.WriteLine("{0} : {1} - Match = {2}", fnA, fnB, fnSim)
+			Dim lnA = studentA.LastName.ToLower()
+			Dim lnB = studentB.LastName.ToLower()
+			Dim lnSim As Single = GetSimilarity(lnA, lnB)
+			'Console.WriteLine("{0} : {1} - Match = {2}", lnA, lnB, lnSim)
+			Dim snA = "n" & studentA.StudentNumber
+			Dim snB = studentB.StudentNumber
+			Dim snSim As Single = GetSimilarity(snA, snB)
+			'Console.WriteLine("{0} : {1} - Match = {2}", snA, snB, snSim)
+			Dim totalSim As Single = (fnSim * 0.1F + (lnSim * 0.3F) + (snSim * 0.6F))
+			studentB.Match = totalSim
+			simList.Add(totalSim)
+			'Console.WriteLine("{0} : {1} - Match = {2}%", studentA.LastName, studentB.LastName, (totalSim * 100).ToString("N2"))
+		Next
+		Return simList
+	End Function
 
-        Dim simList As List(Of Single) = New List(Of Single)
-        For Each studentB As Student In studentList
-            Dim fnA = (If(studentA.FirstName.Length > 0, studentA.FirstName(0).ToString().ToLower(), ""))
-            Dim fnB = (If(studentB.FirstName.Length > 0, studentB.FirstName(0).ToString().ToLower(), ""))
-            Dim fnSim As Single = (If(fnA = fnB, 1, 0))
-            'Console.WriteLine("{0} : {1} - Match = {2}", fnA, fnB, fnSim)
-            Dim lnA = studentA.LastName.ToLower()
-            Dim lnB = studentB.LastName.ToLower()
-            Dim lnSim As Single = GetSimilarity(lnA, lnB)
-            'Console.WriteLine("{0} : {1} - Match = {2}", lnA, lnB, lnSim)
-            Dim snA = "n" & studentA.StudentNumber
-            Dim snB = studentB.StudentNumber
-            Dim snSim As Single = GetSimilarity(snA, snB)
-            'Console.WriteLine("{0} : {1} - Match = {2}", snA, snB, snSim)
-            Dim totalSim As Single = (fnSim * 0.1F + (lnSim * 0.3F) + (snSim * 0.6F))
-            studentB.Match = totalSim
-            'Console.WriteLine("{0} : {1} - Match = {2}%", studentA.LastName, studentB.LastName, (totalSim * 100).ToString("N2"))
-        Next
-    End Sub
-
-    Public Function GetSimilarity(stringA As String, stringB As String) As Single
+	Public Function GetSimilarity(stringA As String, stringB As String) As Single
         Dim distance As Single = ComputeDistance(stringA, stringB)
         Dim maxLen As Single = stringA.Length
         If maxLen < stringB.Length Then

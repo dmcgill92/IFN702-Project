@@ -25,9 +25,9 @@ Public Class Form1
         With OpenFileDialog1                        'Opens a file browser dialog
             .Title = "Excel File with Results"      'Dialog box title
             .FileName = ""
-            .Filter = "Excel File|*.xlsx;*.xls"     'Filter to only show Excel files
+			.Filter = "CSV Files (*.csv)|*.csv|Excel File|*.xlsx;*.xls"     'Filter to only show Excel and CSV files
 
-            Dim sFileName As String = ""
+			Dim sFileName As String = ""
 
             If .ShowDialog() = DialogResult.OK Then
                 sFileName = .FileName
@@ -49,9 +49,9 @@ Public Class Form1
         With OpenFileDialog1                        'Opens a file browser dialog
             .Title = "Excel File with Student Names"      'Dialog box title
             .FileName = ""
-            .Filter = "Excel File|*.xlsx;*.xls"     'Filter to only show Excel files
+			.Filter = "Excel File|*.xlsx;*.xls"     'Filter to only show Excel files
 
-            Dim sFileName As String = ""
+			Dim sFileName As String = ""
 
             If .ShowDialog() = DialogResult.OK Then
                 sFileName = .FileName
@@ -116,10 +116,14 @@ Public Class Form1
     Private Sub tabControl_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles tcLeft.SelectedIndexChanged, tcRight.SelectedIndexChanged
         Dim tabControl As TabControl = CType(sender, TabControl)
         Dim index As Integer = tabControl.SelectedIndex
-        If index = 1 Then
-            btnConfirm.Visible = True
-        Else
-            btnConfirm.Visible = False
+		If index = 1 Then
+			Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
+			Dim selectedStudent As Student = row.DataBoundItem.Object
+			er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+			dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+			btnConfirm.Visible = True
+		Else
+			btnConfirm.Visible = False
         End If
         tcLeft.SelectTab(index)
         tcRight.SelectTab(index)
@@ -157,23 +161,29 @@ Public Class Form1
     Private Sub DgUnmatchedLeft_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnmatchedLeft.CellClick
         Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
         Dim selectedStudent As Student = row.DataBoundItem.Object
-        er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
-        dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+		er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+		dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+		dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
     End Sub
 
     Private Sub BtnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
         Dim studentA As Student = dgUnmatchedLeft.SelectedRows(0).DataBoundItem.Object
-        dh.RemoveFromGrid(studentA, dgUnmatchedLeft, leftUnmatchedList)
-        dh.AddToGrid(studentA, dgMatchedLeft, leftMatchedList)
+		dh.RemoveFromList(studentA, leftUnmatchedList)
+		dh.AddToList(studentA, leftMatchedList)
 
-        Dim studentB As Student = dgUnmatchedRight.SelectedRows(0).DataBoundItem.Object
-        dh.RemoveFromGrid(studentB, dgUnmatchedRight, rightUnmatchedList)
-        studentB.Result = studentA.Result
-        studentB.MatchLastName = studentA.LastName
-        studentA.MatchStudentNumber = studentB.StudentNumber
-        dh.AddToGrid(studentB, dgMatchedRight, rightMatchedList)
+		Dim studentB As Student = dgUnmatchedRight.SelectedRows(0).DataBoundItem.Object
+		dh.RemoveFromList(studentB, rightUnmatchedList)
+		studentB.Result = studentA.Result
+		studentA.MatchLastName = studentB.LastName
+		studentA.MatchStudentNumber = studentB.StudentNumber
+		dh.AddToList(studentB, rightMatchedList)
 
-        If dgUnmatchedLeft.Rows.Count > 0 Then
+		dh.UpdateGrid(dgUnmatchedLeft, leftUnmatchedList)
+		dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+		dh.UpdateGrid(dgMatchedLeft, leftMatchedList)
+		dh.UpdateGrid(dgMatchedRight, rightMatchedList)
+
+		If dgUnmatchedLeft.Rows.Count > 0 Then
             Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
             Dim selectedStudent As Student = row.DataBoundItem.Object
             er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
@@ -201,17 +211,17 @@ Public Class Form1
         leftIDs = New List(Of Integer)
         rightIDs = New List(Of Integer)
         Dim iteration As Integer = 0
-        For Each rStudent As Student In leftUnmatchedList
-            Dim ids = er.Match(rStudent, rightUnmatchedList)
-            If Not ids Is Nothing Then
-                leftIDs.Add(ids(0))
-                rightIDs.Add(ids(1))
-            End If
-            iteration += 1
-            bgwrkMatching.ReportProgress(iteration / totalStudents * 100)
-            Console.WriteLine("Matching: {0}/{1}", iteration, totalStudents)
-        Next
-    End Sub
+		For Each rStudent As Student In leftUnmatchedList
+			Dim ids = er.Match(rStudent, rightUnmatchedList)
+			If Not ids Is Nothing Then
+				leftIDs.Add(ids(0))
+				rightIDs.Add(ids(1))
+			End If
+			iteration += 1
+			bgwrkMatching.ReportProgress(iteration / totalStudents * 100)
+			Console.WriteLine("Matching: {0}/{1}", iteration, totalStudents)
+		Next
+	End Sub
 
     Private Sub BgwrkMatching_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles bgwrkMatching.ProgressChanged
         progBar1.Value = e.ProgressPercentage
@@ -237,8 +247,8 @@ Public Class Form1
         dh.BindData(dgMatchedRight, rightMatchedList)
         dgMatchedRight.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
         dgMatchedRight.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
-        dgMatchedRight.Sort(dgMatchedRight.Columns(1), ListSortDirection.Ascending)
-        Console.WriteLine("Added to right matched list")
+		dgMatchedRight.Sort(dgMatchedRight.Columns(1), ListSortDirection.Ascending)
+		Console.WriteLine("Added to right matched list")
 
         bgwrkDataHandler.RunWorkerAsync()
     End Sub
@@ -246,20 +256,23 @@ Public Class Form1
     Private Sub BgwrkDataHandler_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwrkDataHandler.DoWork
         Dim count As Integer = 0
         Dim total As Integer = leftIDs.Count + rightIDs.Count
-        For Each id As Integer In leftIDs
-            dh.RemoveFromGridByID(id, dgUnmatchedLeft, leftUnmatchedList)
-            count += 1
-            bgwrkDataHandler.ReportProgress(count / total * 100)
-            Console.WriteLine("Removing from left: {0}/{1}", count, total)
-        Next
+		For Each id As Integer In leftIDs
+			dh.RemoveFromGridByID(id, leftUnmatchedList)
+			count += 1
+			bgwrkDataHandler.ReportProgress(count / total * 100)
+			Console.WriteLine("Removing from left: {0}/{1}", count, total)
+		Next
+		dh.UpdateGrid(dgUnmatchedLeft, leftUnmatchedList)
 
-        For Each id As Integer In rightIDs
-            dh.RemoveFromGridByID(id, dgUnmatchedRight, rightUnmatchedList)
-            count += 1
-            bgwrkDataHandler.ReportProgress(count / total * 100)
-            Console.WriteLine("Removing from right: {0}/{1}", count, total)
-        Next
-    End Sub
+		For Each id As Integer In rightIDs
+			dh.RemoveFromGridByID(id, rightUnmatchedList)
+			count += 1
+			bgwrkDataHandler.ReportProgress(count / total * 100)
+			Console.WriteLine("Removing from right: {0}/{1}", count, total)
+		Next
+		dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+
+	End Sub
 
     Private Sub BgwrkDataHandler_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles bgwrkDataHandler.ProgressChanged
         progBar1.Value = e.ProgressPercentage
@@ -267,34 +280,10 @@ Public Class Form1
     End Sub
 
     Private Sub BgwrkDataHandler_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwrkDataHandler.RunWorkerCompleted
-        Console.WriteLine("Removing finished")
-        tcLeft.TabPages.Insert(0, tabMatched1)
-        tcRight.TabPages.Insert(0, tabMatched2)
-        tcLeft.SelectTab(tabMatched1)
-        tcRight.SelectTab(tabMatched2)
+		Console.WriteLine("Removing finished")
 
-        dgUnmatchedRight.Columns(4).Visible = True
-        dgUnmatchedRight.Columns(4).AutoSizeMode = DataGridViewAutoSizeColumnMode.None
-        dgUnmatchedRight.Columns(4).Width = 50
-        dgUnmatchedRight.Columns(4).DefaultCellStyle.Format = "0.##%"
-
-        Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
-        Dim selectedStudent As Student = row.DataBoundItem.Object
-        er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
-        dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
-
-        dgUnmatchedLeft.Enabled = True
-        dgUnmatchedRight.Enabled = True
-
-        dgUnmatchedLeft.Columns(1).SortMode = DataGridViewColumnSortMode.Automatic
-        dgUnmatchedLeft.Columns(2).SortMode = DataGridViewColumnSortMode.Automatic
-
-        progBar1.Visible = False
-        lblProg.Visible = False
-        lblMatched.Visible = True
-        UpdateMatchCount()
-        btnMatch.Visible = False
-    End Sub
+		bgwrkPartialMatch.RunWorkerAsync()
+	End Sub
 
     Private Sub DgUnmatchedRight_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgUnmatchedRight.CellPainting
         If e.RowIndex = -1 Then
@@ -302,4 +291,59 @@ Public Class Form1
             e.Handled = True
         End If
     End Sub
+
+	Private Sub BgwrkPartialMatch_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwrkPartialMatch.DoWork
+		Dim total As Integer = leftUnmatchedList.Count
+		For iteration As Integer = total - 1 To 0 Step -1
+			Dim studentA As Student = leftUnmatchedList(iteration)
+			Dim matches As List(Of Single) = er.Partial_Match_Similarity(studentA, rightUnmatchedList)
+			Dim matchesReversed As List(Of Single) = New List(Of Single)(matches)
+			matchesReversed.Sort()
+			matchesReversed.Reverse()
+			If matchesReversed(0) > 0.85F AndAlso matchesReversed(1) < 0.5F Then
+				Dim studentB As Student = rightUnmatchedList(matches.IndexOf(matchesReversed(0)))
+				dh.RemoveFromList(studentA, leftUnmatchedList)
+				dh.AddToList(studentA, leftMatchedList)
+				dh.RemoveFromList(studentB, rightUnmatchedList)
+				studentB.Result = studentA.Result
+				studentA.MatchLastName = studentB.LastName
+				studentA.MatchStudentNumber = studentB.StudentNumber
+				dh.AddToList(studentB, rightMatchedList)
+			End If
+			bgwrkPartialMatch.ReportProgress((total - iteration) / total * 100)
+		Next
+	End Sub
+
+	Private Sub BgwrkPartialMatch_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles bgwrkPartialMatch.ProgressChanged
+		progBar1.Value = e.ProgressPercentage
+		lblProg.Text = "Performing Partial Matching..."
+	End Sub
+
+	Private Sub BgwrkPartialMatch_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwrkPartialMatch.RunWorkerCompleted
+		dh.UpdateGrid(dgUnmatchedLeft, leftUnmatchedList)
+		dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+		dh.UpdateGrid(dgMatchedLeft, leftMatchedList)
+		dh.UpdateGrid(dgMatchedRight, rightMatchedList)
+		tcLeft.TabPages.Insert(0, tabMatched1)
+		tcRight.TabPages.Insert(0, tabMatched2)
+		tcLeft.SelectTab(tabMatched1)
+		tcRight.SelectTab(tabMatched2)
+
+		dgUnmatchedRight.Columns(4).Visible = True
+		dgUnmatchedRight.Columns(4).AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		dgUnmatchedRight.Columns(4).Width = 50
+		dgUnmatchedRight.Columns(4).DefaultCellStyle.Format = "0.##%"
+
+		dgUnmatchedLeft.Enabled = True
+		dgUnmatchedRight.Enabled = True
+
+		dgUnmatchedLeft.Columns(1).SortMode = DataGridViewColumnSortMode.Automatic
+		dgUnmatchedLeft.Columns(2).SortMode = DataGridViewColumnSortMode.Automatic
+
+		progBar1.Visible = False
+		lblProg.Visible = False
+		lblMatched.Visible = True
+		UpdateMatchCount()
+		btnMatch.Visible = False
+	End Sub
 End Class

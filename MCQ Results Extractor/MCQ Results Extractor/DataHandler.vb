@@ -1,27 +1,25 @@
 ﻿Imports Equin.ApplicationFramework
 
 Public Class DataHandler
-    Public Sub RemoveFromGridByID(id As Integer, grid As DataGridView, list As List(Of Student))
-        For Each student As Student In list
-            If student.Id = id Then
-                list.Remove(student)
-                UpdateGrid(grid, list)
-                Exit For
-            End If
-        Next
-    End Sub
+	Public Sub RemoveFromGridByID(id As Integer, list As List(Of Student))
+		For Each student As Student In list
+			If student.Id = id Then
+				list.Remove(student)
+				Exit For
+			End If
+		Next
+	End Sub
 
-    Public Sub AddToGridByID(id As Integer, grid As DataGridView, listA As List(Of Student), listB As List(Of Student))
-        For Each student As Student In listB
-            If student.Id = id Then
-                listA.Add(student)
-                UpdateGrid(grid, listA)
-                Exit For
-            End If
-        Next
-    End Sub
+	Public Sub AddToGridByID(id As Integer, listA As List(Of Student), listB As List(Of Student))
+		For Each student As Student In listB
+			If student.Id = id Then
+				listA.Add(student)
+				Exit For
+			End If
+		Next
+	End Sub
 
-    Public Sub AddIds(ByRef editList As List(Of Student), ByVal fromList As List(Of Student), ByVal ids As List(Of Integer))
+	Public Sub AddIds(ByRef editList As List(Of Student), ByVal fromList As List(Of Student), ByVal ids As List(Of Integer))
         For Each student As Student In fromList
             If ids.Contains(student.Id) Then
                 editList.Add(student)
@@ -43,17 +41,15 @@ Public Class DataHandler
         dataGrid.Columns(6).Visible = False
     End Sub
 
-    Public Sub AddToGrid(student As Student, grid As DataGridView, list As List(Of Student))
-        list.Add(student)
-        UpdateGrid(grid, list)
-    End Sub
+	Public Sub AddToList(student As Student, list As List(Of Student))
+		list.Add(student)
+	End Sub
 
-    Public Sub RemoveFromGrid(student As Student, grid As DataGridView, list As List(Of Student))
-        list.Remove(student)
-        UpdateGrid(grid, list)
-    End Sub
+	Public Sub RemoveFromList(student As Student, list As List(Of Student))
+		list.Remove(student)
+	End Sub
 
-    Public Sub UpdateGrid(ByRef grid As DataGridView, ByRef list As List(Of Student))
+	Public Sub UpdateGrid(ByRef grid As DataGridView, ByRef list As List(Of Student))
         If grid.InvokeRequired Then
             grid.Invoke(New UpdateGridInvoker(AddressOf UpdateGrid), grid, list)
         Else
