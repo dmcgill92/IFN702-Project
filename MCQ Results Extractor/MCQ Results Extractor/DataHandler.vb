@@ -1,21 +1,22 @@
 ﻿Imports Equin.ApplicationFramework
 
 Public Class DataHandler
-
-    Public Sub RemoveDataRange(dataGrid As DataGridView, ByVal ids As List(Of Integer))
-        For index As Integer = dataGrid.Rows.Count - 1 To 0 Step -1
-            Dim student As Student = dataGrid.Rows(index).DataBoundItem.Object
-            If ids.Contains(student.Id) Then
-                dataGrid.Rows.Remove(dataGrid.Rows(index))
+    Public Sub RemoveFromGridByID(id As Integer, grid As DataGridView, list As List(Of Student))
+        For Each student As Student In list
+            If student.Id = id Then
+                list.Remove(student)
+                UpdateGrid(grid, list)
+                Exit For
             End If
         Next
     End Sub
 
-    Public Sub AddDataRange(dataGrid As DataGridView, fromGrid As DataGridView, ByVal ids As List(Of Integer))
-        For Each row As DataGridViewRow In fromGrid.Rows
-            Dim student As Student = row.DataBoundItem
-            If ids.Contains(student.Id) Then
-                dataGrid.Rows.Add(row)
+    Public Sub AddToGridByID(id As Integer, grid As DataGridView, listA As List(Of Student), listB As List(Of Student))
+        For Each student As Student In listB
+            If student.Id = id Then
+                listA.Add(student)
+                UpdateGrid(grid, listA)
+                Exit For
             End If
         Next
     End Sub
@@ -38,6 +39,8 @@ Public Class DataHandler
         dataGrid.Columns(2).FillWeight = 2
         dataGrid.Columns(3).FillWeight = 1
         dataGrid.Columns(4).Visible = False
+        dataGrid.Columns(5).Visible = False
+        dataGrid.Columns(6).Visible = False
     End Sub
 
     Public Sub AddToGrid(student As Student, grid As DataGridView, list As List(Of Student))
@@ -50,19 +53,25 @@ Public Class DataHandler
         UpdateGrid(grid, list)
     End Sub
 
-    Public Sub UpdateGrid(grid As DataGridView, list As List(Of Student))
-        Dim sortedOrder As SortOrder = grid.SortOrder
-        Dim sortColumnIndex As Integer = -1
-        If sortedOrder <> SortOrder.None Then
-            sortColumnIndex = grid.SortedColumn.Index
+    Public Sub UpdateGrid(ByRef grid As DataGridView, ByRef list As List(Of Student))
+        If grid.InvokeRequired Then
+            grid.Invoke(New UpdateGridInvoker(AddressOf UpdateGrid), grid, list)
+        Else
+            Dim sortedOrder As SortOrder = grid.SortOrder
+            Dim sortColumnIndex As Integer = -1
+            If sortedOrder <> SortOrder.None Then
+                sortColumnIndex = grid.SortedColumn.Index
+            End If
+            Dim bindListView As BindingListView(Of Student) = New BindingListView(Of Student)(list)
+            grid.DataSource = bindListView
+            grid.BindingContext = New BindingContext()
+            If sortedOrder = SortOrder.None Then
+                Return
+            End If
+            grid.Sort(grid.Columns(sortColumnIndex), sortedOrder - 1)
         End If
-        Dim bindListView As BindingListView(Of Student) = New BindingListView(Of Student)(list)
-        grid.DataSource = bindListView
-        grid.BindingContext = New BindingContext()
-        If sortedOrder = SortOrder.None Then
-            Return
-        End If
-        grid.Sort(grid.Columns(sortColumnIndex), sortedOrder - 1)
     End Sub
+
+    Private Delegate Sub UpdateGridInvoker(ByRef grid As DataGridView, ByRef list As List(Of Student))
 
 End Class

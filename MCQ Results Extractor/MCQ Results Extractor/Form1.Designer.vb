@@ -32,6 +32,9 @@ Partial Class Form1
         Me.btnBrowse2 = New System.Windows.Forms.Button()
         Me.btnBrowse1 = New System.Windows.Forms.Button()
         Me.ComparisonPanel = New System.Windows.Forms.Panel()
+        Me.lblProg = New System.Windows.Forms.Label()
+        Me.progBar1 = New System.Windows.Forms.ProgressBar()
+        Me.btnConfirm = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.tcLeft = New System.Windows.Forms.TabControl()
         Me.tabMatched1 = New System.Windows.Forms.TabPage()
@@ -47,7 +50,8 @@ Partial Class Form1
         Me.btnMatch = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.btnConfirm = New System.Windows.Forms.Button()
+        Me.bgwrkMatching = New System.ComponentModel.BackgroundWorker()
+        Me.bgwrkDataHandler = New System.ComponentModel.BackgroundWorker()
         Me.LaunchPanel.SuspendLayout()
         Me.ComparisonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -154,6 +158,8 @@ Partial Class Form1
         '
         'ComparisonPanel
         '
+        Me.ComparisonPanel.Controls.Add(Me.lblProg)
+        Me.ComparisonPanel.Controls.Add(Me.progBar1)
         Me.ComparisonPanel.Controls.Add(Me.btnConfirm)
         Me.ComparisonPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.ComparisonPanel.Controls.Add(Me.lblMatched)
@@ -166,6 +172,36 @@ Partial Class Form1
         Me.ComparisonPanel.TabIndex = 14
         Me.ComparisonPanel.Visible = False
         '
+        'lblProg
+        '
+        Me.lblProg.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.lblProg.Location = New System.Drawing.Point(325, 399)
+        Me.lblProg.Name = "lblProg"
+        Me.lblProg.Size = New System.Drawing.Size(150, 13)
+        Me.lblProg.TabIndex = 11
+        Me.lblProg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblProg.Visible = False
+        '
+        'progBar1
+        '
+        Me.progBar1.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.progBar1.Location = New System.Drawing.Point(280, 370)
+        Me.progBar1.Name = "progBar1"
+        Me.progBar1.Size = New System.Drawing.Size(240, 20)
+        Me.progBar1.TabIndex = 10
+        Me.progBar1.Visible = False
+        '
+        'btnConfirm
+        '
+        Me.btnConfirm.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.btnConfirm.Location = New System.Drawing.Point(358, 328)
+        Me.btnConfirm.Name = "btnConfirm"
+        Me.btnConfirm.Size = New System.Drawing.Size(85, 23)
+        Me.btnConfirm.TabIndex = 9
+        Me.btnConfirm.Text = "Confirm Match"
+        Me.btnConfirm.UseVisualStyleBackColor = True
+        Me.btnConfirm.Visible = False
+        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -176,11 +212,11 @@ Partial Class Form1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.tcLeft, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.tcRight, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(31, 22)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(25, 22)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(737, 300)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(750, 300)
         Me.TableLayoutPanel1.TabIndex = 8
         '
         'tcLeft
@@ -191,7 +227,7 @@ Partial Class Form1
         Me.tcLeft.Location = New System.Drawing.Point(3, 3)
         Me.tcLeft.Name = "tcLeft"
         Me.tcLeft.SelectedIndex = 0
-        Me.tcLeft.Size = New System.Drawing.Size(362, 294)
+        Me.tcLeft.Size = New System.Drawing.Size(369, 294)
         Me.tcLeft.TabIndex = 6
         '
         'tabMatched1
@@ -201,7 +237,7 @@ Partial Class Form1
         Me.tabMatched1.Location = New System.Drawing.Point(4, 22)
         Me.tabMatched1.Name = "tabMatched1"
         Me.tabMatched1.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabMatched1.Size = New System.Drawing.Size(354, 268)
+        Me.tabMatched1.Size = New System.Drawing.Size(361, 268)
         Me.tabMatched1.TabIndex = 0
         Me.tabMatched1.Text = "Matched"
         Me.tabMatched1.UseVisualStyleBackColor = True
@@ -221,7 +257,7 @@ Partial Class Form1
         Me.dgMatchedLeft.RowHeadersVisible = False
         Me.dgMatchedLeft.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgMatchedLeft.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgMatchedLeft.Size = New System.Drawing.Size(348, 262)
+        Me.dgMatchedLeft.Size = New System.Drawing.Size(355, 262)
         Me.dgMatchedLeft.TabIndex = 0
         '
         'tabUnmatched1
@@ -258,10 +294,10 @@ Partial Class Form1
         Me.tcRight.Controls.Add(Me.tabMatched2)
         Me.tcRight.Controls.Add(Me.tabUnmatched2)
         Me.tcRight.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tcRight.Location = New System.Drawing.Point(371, 3)
+        Me.tcRight.Location = New System.Drawing.Point(378, 3)
         Me.tcRight.Name = "tcRight"
         Me.tcRight.SelectedIndex = 0
-        Me.tcRight.Size = New System.Drawing.Size(363, 294)
+        Me.tcRight.Size = New System.Drawing.Size(369, 294)
         Me.tcRight.TabIndex = 6
         '
         'tabMatched2
@@ -271,7 +307,7 @@ Partial Class Form1
         Me.tabMatched2.Location = New System.Drawing.Point(4, 22)
         Me.tabMatched2.Name = "tabMatched2"
         Me.tabMatched2.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabMatched2.Size = New System.Drawing.Size(355, 268)
+        Me.tabMatched2.Size = New System.Drawing.Size(356, 268)
         Me.tabMatched2.TabIndex = 0
         Me.tabMatched2.Text = "Matched"
         Me.tabMatched2.UseVisualStyleBackColor = True
@@ -291,7 +327,7 @@ Partial Class Form1
         Me.dgMatchedRight.RowHeadersVisible = False
         Me.dgMatchedRight.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgMatchedRight.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgMatchedRight.Size = New System.Drawing.Size(349, 262)
+        Me.dgMatchedRight.Size = New System.Drawing.Size(350, 262)
         Me.dgMatchedRight.TabIndex = 0
         '
         'tabUnmatched2
@@ -300,7 +336,7 @@ Partial Class Form1
         Me.tabUnmatched2.Location = New System.Drawing.Point(4, 22)
         Me.tabUnmatched2.Name = "tabUnmatched2"
         Me.tabUnmatched2.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabUnmatched2.Size = New System.Drawing.Size(355, 268)
+        Me.tabUnmatched2.Size = New System.Drawing.Size(361, 268)
         Me.tabUnmatched2.TabIndex = 1
         Me.tabUnmatched2.Text = "Unmatched"
         Me.tabUnmatched2.UseVisualStyleBackColor = True
@@ -321,7 +357,7 @@ Partial Class Form1
         Me.dgUnmatchedRight.RowHeadersVisible = False
         Me.dgUnmatchedRight.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgUnmatchedRight.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgUnmatchedRight.Size = New System.Drawing.Size(349, 262)
+        Me.dgUnmatchedRight.Size = New System.Drawing.Size(355, 262)
         Me.dgUnmatchedRight.TabIndex = 0
         '
         'lblMatched
@@ -356,16 +392,13 @@ Partial Class Form1
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
         '
-        'btnConfirm
+        'bgwrkMatching
         '
-        Me.btnConfirm.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.btnConfirm.Location = New System.Drawing.Point(358, 328)
-        Me.btnConfirm.Name = "btnConfirm"
-        Me.btnConfirm.Size = New System.Drawing.Size(85, 23)
-        Me.btnConfirm.TabIndex = 9
-        Me.btnConfirm.Text = "Confirm Match"
-        Me.btnConfirm.UseVisualStyleBackColor = True
-        Me.btnConfirm.Visible = False
+        Me.bgwrkMatching.WorkerReportsProgress = True
+        '
+        'bgwrkDataHandler
+        '
+        Me.bgwrkDataHandler.WorkerReportsProgress = True
         '
         'Form1
         '
@@ -421,4 +454,8 @@ Partial Class Form1
     Friend WithEvents tabUnmatched2 As TabPage
     Friend WithEvents dgUnmatchedRight As DataGridView
     Friend WithEvents btnConfirm As Button
+    Friend WithEvents bgwrkMatching As System.ComponentModel.BackgroundWorker
+    Friend WithEvents bgwrkDataHandler As System.ComponentModel.BackgroundWorker
+    Friend WithEvents progBar1 As ProgressBar
+    Friend WithEvents lblProg As Label
 End Class

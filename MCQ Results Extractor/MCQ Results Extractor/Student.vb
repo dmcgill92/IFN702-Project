@@ -8,15 +8,10 @@ Public Class Student
     Dim _id As Integer
 
     Dim _match As Single
+    Dim _matchLastName As String
+    Dim _matchStudentNumber As String
 
-    Public Sub New(firstName As String, lastName As String, studentNumber As String, result As Integer, id As Integer, match As Single)
-        _firstName = firstName
-        _lastName = lastName
-        _studentNumber = studentNumber
-        _result = result
-        _id = id
-        _match = match
-    End Sub
+
 
     Public Sub New(student As Student)
         _firstName = student.FirstName
@@ -25,6 +20,22 @@ Public Class Student
         _result = student.Result
         _id = student.Id
         _match = student.Match
+        _matchLastName = student.MatchLastName
+        _matchStudentNumber = student.MatchStudentNumber
+    End Sub
+
+    Public Sub New()
+    End Sub
+
+    Public Sub New(firstName As String, lastName As String, studentNumber As String, result As Integer, id As Integer, match As Single, matchLastName As String, matchStudentNumber As String)
+        _firstName = firstName
+        _lastName = lastName
+        _studentNumber = studentNumber
+        _result = result
+        _id = id
+        _match = match
+        _matchLastName = matchLastName
+        _matchStudentNumber = matchStudentNumber
     End Sub
 
     <DisplayName("First Name")>
@@ -66,7 +77,7 @@ Public Class Student
         End Set
     End Property
 
-    <DisplayName("Match %")>
+    <DisplayName("Match")>
     Public Property Match As Single
         Get
             Return _match
@@ -83,6 +94,24 @@ Public Class Student
         End Get
         Set(value As Integer)
             _id = value
+        End Set
+    End Property
+
+    Public Property MatchLastName As String
+        Get
+            Return _matchLastName
+        End Get
+        Set(value As String)
+            _matchLastName = value
+        End Set
+    End Property
+
+    Public Property MatchStudentNumber As String
+        Get
+            Return _matchStudentNumber
+        End Get
+        Set(value As String)
+            _matchStudentNumber = value
         End Set
     End Property
 End Class

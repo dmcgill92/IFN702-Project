@@ -108,7 +108,7 @@ Friend Class ExcelReader
                 result = workSheet.Cells(columnLetters(3) & index).Value
             End If
             Dim id As Integer = index - 1
-            Dim tempStudent As Student = New Student(fname, lname, sNum, result, id, Nothing)
+            Dim tempStudent As Student = New Student(fname, lname, sNum, result, id, Nothing, Nothing, Nothing)
 
             tempList.Add(tempStudent)
         Next
@@ -117,46 +117,41 @@ Friend Class ExcelReader
         Return tempList
     End Function
 
-    Public Function Full_Match(ByRef resultsFile As List(Of Student), ByRef studentFile As List(Of Student)) As List(Of List(Of Integer))
-        Dim rRemoveList As List(Of Integer) = New List(Of Integer)
-        Dim sRemoveList As List(Of Integer) = New List(Of Integer)
-        Dim tempList As List(Of List(Of Integer)) = New List(Of List(Of Integer))
-        Dim isMatch As Boolean
-        For Each rStudent As Student In resultsFile
-            isMatch = True
-            For Each student As Student In studentFile
-                If rStudent.FirstName = "" OrElse rStudent.FirstName(0).ToString().ToLower() <> student.FirstName(0).ToString().ToLower() Then
-                    'Console.WriteLine("{0} : {1}", rStudent.FirstName, student.FirstName)
-                    isMatch = False
-                    Continue For
-                End If
-                If rStudent.LastName.ToLower() <> student.LastName.ToLower() Then
-                    'Console.WriteLine("{0} : {1}", rStudent.LastName, student.LastName)
-                    isMatch = False
-                    Continue For
-                End If
-                If "n" & rStudent.StudentNumber <> student.StudentNumber Then
-                    'Console.WriteLine("{0} : {1}", rStudent.StudentNumber, student.StudentNumber)
-                    isMatch = False
-                    Continue For
-                End If
-                isMatch = True
-                sRemoveList.Add(student.Id)
-                student.Result = rStudent.Result
-                Exit For
-            Next
-            If isMatch Then
-                rRemoveList.Add(rStudent.Id)
+    Public Function Match(ByRef rStudent As Student, ByRef studentList As List(Of Student)) As Integer()
+        Dim isMatch As Boolean = True
+        Dim removeIndices As Integer() = New Integer(2) {}
+        For Each student As Student In studentList
+            If rStudent.FirstName = "" OrElse rStudent.FirstName(0).ToString().ToLower() <> student.FirstName(0).ToString().ToLower() Then
+                'Console.WriteLine("{0} : {1}", rStudent.FirstName, student.FirstName)
+                isMatch = False
                 Continue For
             End If
-
+            If rStudent.LastName.ToLower() <> student.LastName.ToLower() Then
+                'Console.WriteLine("{0} : {1}", rStudent.LastName, student.LastName)
+                isMatch = False
+                Continue For
+            End If
+            If "n" & rStudent.StudentNumber <> student.StudentNumber Then
+                'Console.WriteLine("{0} : {1}", rStudent.StudentNumber, student.StudentNumber)
+                isMatch = False
+                Continue For
+            End If
+            isMatch = True
+            removeIndices(1) = student.Id
+            student.Result = rStudent.Result
+            rStudent.MatchLastName = student.LastName
+            rStudent.MatchStudentNumber = student.StudentNumber
+            Exit For
         Next
-        tempList.Add(rRemoveList)
-        tempList.Add(sRemoveList)
-        Return tempList
+        If isMatch Then
+            removeIndices(0) = rStudent.Id
+            Return removeIndices
+        End If
+        Return Nothing
     End Function
 
     Public Sub Partial_Match_Similarity(studentA As Student, studentList As List(Of Student))
+
         Dim simList As List(Of Single) = New List(Of Single)
         For Each studentB As Student In studentList
             Dim fnA = (If(studentA.FirstName.Length > 0, studentA.FirstName(0).ToString().ToLower(), ""))
@@ -171,7 +166,7 @@ Friend Class ExcelReader
             Dim snB = studentB.StudentNumber
             Dim snSim As Single = GetSimilarity(snA, snB)
             'Console.WriteLine("{0} : {1} - Match = {2}", snA, snB, snSim)
-            Dim totalSim As Single = (fnSim + (lnSim * 2) + (snSim * 3)) / 6
+            Dim totalSim As Single = (fnSim * 0.1F + (lnSim * 0.3F) + (snSim * 0.6F))
             studentB.Match = totalSim
             'Console.WriteLine("{0} : {1} - Match = {2}%", studentA.LastName, studentB.LastName, (totalSim * 100).ToString("N2"))
         Next
