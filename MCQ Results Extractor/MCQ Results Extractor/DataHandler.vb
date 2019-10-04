@@ -28,18 +28,21 @@ Public Class DataHandler
     End Sub
 
     Public Sub BindData(dataGrid As DataGridView, studentList As List(Of Student))
-        Dim blView As BindingListView(Of Student) = New BindingListView(Of Student)(studentList)
-        dataGrid.AutoGenerateColumns = True
-        dataGrid.DataSource = blView
-        dataGrid.BindingContext = New BindingContext()
+		Dim blView As BindingListView(Of Student) = New BindingListView(Of Student)(studentList)
+		Dim bs As BindingSource = New BindingSource()
+		bs.DataSource = blView
+		dataGrid.AutoGenerateColumns = True
+		dataGrid.DataSource = bs
+		dataGrid.BindingContext = New BindingContext()
         dataGrid.Columns(0).FillWeight = 2
         dataGrid.Columns(1).FillWeight = 2
         dataGrid.Columns(2).FillWeight = 2
         dataGrid.Columns(3).FillWeight = 1
         dataGrid.Columns(4).Visible = False
         dataGrid.Columns(5).Visible = False
-        dataGrid.Columns(6).Visible = False
-    End Sub
+		dataGrid.Columns(6).Visible = False
+		dataGrid.Columns(7).Visible = False
+	End Sub
 
 	Public Sub AddToList(student As Student, list As List(Of Student))
 		list.Add(student)
@@ -58,9 +61,11 @@ Public Class DataHandler
             If sortedOrder <> SortOrder.None Then
                 sortColumnIndex = grid.SortedColumn.Index
             End If
-            Dim bindListView As BindingListView(Of Student) = New BindingListView(Of Student)(list)
-            grid.DataSource = bindListView
-            grid.BindingContext = New BindingContext()
+			Dim bindListView As BindingListView(Of Student) = New BindingListView(Of Student)(list)
+			Dim bs As BindingSource = New BindingSource()
+			bs.DataSource = bindListView
+			grid.DataSource = bs
+			grid.BindingContext = New BindingContext()
             If sortedOrder = SortOrder.None Then
                 Return
             End If

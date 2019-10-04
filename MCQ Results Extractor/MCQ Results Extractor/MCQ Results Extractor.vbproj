@@ -162,5 +162,11 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_delete_52.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_delete_26.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

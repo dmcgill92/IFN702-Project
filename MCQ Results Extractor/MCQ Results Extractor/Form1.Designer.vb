@@ -25,6 +25,10 @@ Partial Class Form1
 		Me.btnContinue = New System.Windows.Forms.Button()
 		Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
 		Me.LaunchPanel = New System.Windows.Forms.Panel()
+		Me.pnlHeaderSelection = New System.Windows.Forms.Panel()
+		Me.grpBox = New System.Windows.Forms.GroupBox()
+		Me.radbtn1 = New System.Windows.Forms.RadioButton()
+		Me.lblHeaderSelection = New System.Windows.Forms.Label()
 		Me.fileLocation2 = New System.Windows.Forms.TextBox()
 		Me.fileLocation1 = New System.Windows.Forms.TextBox()
 		Me.lblStudents = New System.Windows.Forms.Label()
@@ -48,12 +52,15 @@ Partial Class Form1
 		Me.dgUnmatchedRight = New System.Windows.Forms.DataGridView()
 		Me.lblMatched = New System.Windows.Forms.Label()
 		Me.btnMatch = New System.Windows.Forms.Button()
+		Me.btnBack = New System.Windows.Forms.Button()
 		Me.btnSave = New System.Windows.Forms.Button()
 		Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
 		Me.bgwrkMatching = New System.ComponentModel.BackgroundWorker()
 		Me.bgwrkDataHandler = New System.ComponentModel.BackgroundWorker()
 		Me.bgwrkPartialMatch = New System.ComponentModel.BackgroundWorker()
 		Me.LaunchPanel.SuspendLayout()
+		Me.pnlHeaderSelection.SuspendLayout()
+		Me.grpBox.SuspendLayout()
 		Me.ComparisonPanel.SuspendLayout()
 		Me.TableLayoutPanel1.SuspendLayout()
 		Me.tcLeft.SuspendLayout()
@@ -85,6 +92,7 @@ Partial Class Form1
 		'
 		'LaunchPanel
 		'
+		Me.LaunchPanel.Controls.Add(Me.pnlHeaderSelection)
 		Me.LaunchPanel.Controls.Add(Me.fileLocation2)
 		Me.LaunchPanel.Controls.Add(Me.fileLocation1)
 		Me.LaunchPanel.Controls.Add(Me.lblStudents)
@@ -97,6 +105,52 @@ Partial Class Form1
 		Me.LaunchPanel.Name = "LaunchPanel"
 		Me.LaunchPanel.Size = New System.Drawing.Size(800, 450)
 		Me.LaunchPanel.TabIndex = 15
+		'
+		'pnlHeaderSelection
+		'
+		Me.pnlHeaderSelection.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
+		Me.pnlHeaderSelection.Controls.Add(Me.grpBox)
+		Me.pnlHeaderSelection.Controls.Add(Me.lblHeaderSelection)
+		Me.pnlHeaderSelection.Location = New System.Drawing.Point(228, 267)
+		Me.pnlHeaderSelection.Name = "pnlHeaderSelection"
+		Me.pnlHeaderSelection.Size = New System.Drawing.Size(345, 150)
+		Me.pnlHeaderSelection.TabIndex = 16
+		Me.pnlHeaderSelection.Visible = False
+		'
+		'grpBox
+		'
+		Me.grpBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
+		Me.grpBox.AutoSize = True
+		Me.grpBox.Controls.Add(Me.radbtn1)
+		Me.grpBox.Location = New System.Drawing.Point(3, 29)
+		Me.grpBox.Name = "grpBox"
+		Me.grpBox.Padding = New System.Windows.Forms.Padding(1)
+		Me.grpBox.Size = New System.Drawing.Size(339, 51)
+		Me.grpBox.TabIndex = 16
+		Me.grpBox.TabStop = False
+		'
+		'radbtn1
+		'
+		Me.radbtn1.Anchor = System.Windows.Forms.AnchorStyles.Top
+		Me.radbtn1.AutoSize = True
+		Me.radbtn1.Location = New System.Drawing.Point(57, 17)
+		Me.radbtn1.Name = "radbtn1"
+		Me.radbtn1.Size = New System.Drawing.Size(225, 17)
+		Me.radbtn1.TabIndex = 14
+		Me.radbtn1.TabStop = True
+		Me.radbtn1.Text = "Exam [Total Pts: 100 Percentage] |823157"
+		Me.radbtn1.UseVisualStyleBackColor = True
+		'
+		'lblHeaderSelection
+		'
+		Me.lblHeaderSelection.Anchor = System.Windows.Forms.AnchorStyles.Top
+		Me.lblHeaderSelection.AutoSize = True
+		Me.lblHeaderSelection.Location = New System.Drawing.Point(100, 11)
+		Me.lblHeaderSelection.Name = "lblHeaderSelection"
+		Me.lblHeaderSelection.Size = New System.Drawing.Size(145, 13)
+		Me.lblHeaderSelection.TabIndex = 15
+		Me.lblHeaderSelection.Text = "Select correct results header:"
+		Me.lblHeaderSelection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 		'
 		'fileLocation2
 		'
@@ -119,9 +173,10 @@ Partial Class Form1
 		'lblStudents
 		'
 		Me.lblStudents.Anchor = System.Windows.Forms.AnchorStyles.Top
-		Me.lblStudents.Location = New System.Drawing.Point(339, 163)
+		Me.lblStudents.AutoSize = True
+		Me.lblStudents.Location = New System.Drawing.Point(334, 163)
 		Me.lblStudents.Name = "lblStudents"
-		Me.lblStudents.Size = New System.Drawing.Size(118, 13)
+		Me.lblStudents.Size = New System.Drawing.Size(132, 13)
 		Me.lblStudents.TabIndex = 12
 		Me.lblStudents.Text = "Student name file location:"
 		Me.lblStudents.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -165,6 +220,7 @@ Partial Class Form1
 		Me.ComparisonPanel.Controls.Add(Me.TableLayoutPanel1)
 		Me.ComparisonPanel.Controls.Add(Me.lblMatched)
 		Me.ComparisonPanel.Controls.Add(Me.btnMatch)
+		Me.ComparisonPanel.Controls.Add(Me.btnBack)
 		Me.ComparisonPanel.Controls.Add(Me.btnSave)
 		Me.ComparisonPanel.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.ComparisonPanel.Location = New System.Drawing.Point(0, 0)
@@ -267,7 +323,7 @@ Partial Class Form1
 		Me.tabUnmatched1.Location = New System.Drawing.Point(4, 22)
 		Me.tabUnmatched1.Name = "tabUnmatched1"
 		Me.tabUnmatched1.Padding = New System.Windows.Forms.Padding(3)
-		Me.tabUnmatched1.Size = New System.Drawing.Size(354, 268)
+		Me.tabUnmatched1.Size = New System.Drawing.Size(361, 268)
 		Me.tabUnmatched1.TabIndex = 1
 		Me.tabUnmatched1.Text = "Unmatched"
 		Me.tabUnmatched1.UseVisualStyleBackColor = True
@@ -287,7 +343,7 @@ Partial Class Form1
 		Me.dgUnmatchedLeft.RowHeadersVisible = False
 		Me.dgUnmatchedLeft.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgUnmatchedLeft.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-		Me.dgUnmatchedLeft.Size = New System.Drawing.Size(348, 262)
+		Me.dgUnmatchedLeft.Size = New System.Drawing.Size(355, 262)
 		Me.dgUnmatchedLeft.TabIndex = 0
 		'
 		'tcRight
@@ -308,7 +364,7 @@ Partial Class Form1
 		Me.tabMatched2.Location = New System.Drawing.Point(4, 22)
 		Me.tabMatched2.Name = "tabMatched2"
 		Me.tabMatched2.Padding = New System.Windows.Forms.Padding(3)
-		Me.tabMatched2.Size = New System.Drawing.Size(356, 268)
+		Me.tabMatched2.Size = New System.Drawing.Size(361, 268)
 		Me.tabMatched2.TabIndex = 0
 		Me.tabMatched2.Text = "Matched"
 		Me.tabMatched2.UseVisualStyleBackColor = True
@@ -328,7 +384,7 @@ Partial Class Form1
 		Me.dgMatchedRight.RowHeadersVisible = False
 		Me.dgMatchedRight.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgMatchedRight.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-		Me.dgMatchedRight.Size = New System.Drawing.Size(350, 262)
+		Me.dgMatchedRight.Size = New System.Drawing.Size(355, 262)
 		Me.dgMatchedRight.TabIndex = 0
 		'
 		'tabUnmatched2
@@ -382,16 +438,26 @@ Partial Class Form1
 		Me.btnMatch.Text = "Match"
 		Me.btnMatch.UseVisualStyleBackColor = True
 		'
+		'btnBack
+		'
+		Me.btnBack.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+		Me.btnBack.Location = New System.Drawing.Point(53, 394)
+		Me.btnBack.Name = "btnBack"
+		Me.btnBack.Size = New System.Drawing.Size(92, 23)
+		Me.btnBack.TabIndex = 4
+		Me.btnBack.Text = "Back"
+		Me.btnBack.UseVisualStyleBackColor = True
+		'
 		'btnSave
 		'
 		Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.btnSave.Enabled = False
-		Me.btnSave.Location = New System.Drawing.Point(670, 394)
+		Me.btnSave.Location = New System.Drawing.Point(653, 394)
 		Me.btnSave.Name = "btnSave"
-		Me.btnSave.Size = New System.Drawing.Size(75, 23)
+		Me.btnSave.Size = New System.Drawing.Size(92, 23)
 		Me.btnSave.TabIndex = 4
-		Me.btnSave.Text = "Save"
+		Me.btnSave.Text = "Save and Close"
 		Me.btnSave.UseVisualStyleBackColor = True
+		Me.btnSave.Visible = False
 		'
 		'bgwrkMatching
 		'
@@ -418,6 +484,10 @@ Partial Class Form1
 		Me.Text = "MCQ Results Extractor"
 		Me.LaunchPanel.ResumeLayout(False)
 		Me.LaunchPanel.PerformLayout()
+		Me.pnlHeaderSelection.ResumeLayout(False)
+		Me.pnlHeaderSelection.PerformLayout()
+		Me.grpBox.ResumeLayout(False)
+		Me.grpBox.PerformLayout()
 		Me.ComparisonPanel.ResumeLayout(False)
 		Me.TableLayoutPanel1.ResumeLayout(False)
 		Me.tcLeft.ResumeLayout(False)
@@ -464,4 +534,9 @@ Partial Class Form1
     Friend WithEvents progBar1 As ProgressBar
     Friend WithEvents lblProg As Label
 	Friend WithEvents bgwrkPartialMatch As System.ComponentModel.BackgroundWorker
+	Friend WithEvents pnlHeaderSelection As Panel
+	Friend WithEvents radbtn1 As RadioButton
+	Friend WithEvents lblHeaderSelection As Label
+	Friend WithEvents grpBox As GroupBox
+	Friend WithEvents btnBack As Button
 End Class
