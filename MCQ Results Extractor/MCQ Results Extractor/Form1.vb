@@ -5,7 +5,8 @@ Public Class Form1
     Dim er As New ExcelReader   'Creates the excel reader
     Dim dh As New DataHandler
 
-    Dim numMatched As Integer
+	Dim hasMatched As Boolean
+	Dim numMatched As Integer
     Dim totalStudents As Integer
 
     Dim originalResultsStudentList As List(Of Student)
@@ -199,14 +200,16 @@ Public Class Form1
 	End Sub
 
 	Private Sub DgUnmatchedLeft_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnmatchedLeft.CellClick
-        Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
-        Dim selectedStudent As Student = row.DataBoundItem.Object
-		er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
-		dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
-		dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
-    End Sub
+		If hasMatched Then
+			Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
+			Dim selectedStudent As Student = row.DataBoundItem.Object
+			er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+			dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+			dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+		End If
+	End Sub
 
-    Private Sub BtnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
+	Private Sub BtnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
         Dim studentA As Student = dgUnmatchedLeft.SelectedRows(0).DataBoundItem.Object
 		dh.RemoveFromList(studentA, leftUnmatchedList)
 		dh.AddToList(studentA, leftMatchedList)
@@ -341,7 +344,7 @@ Public Class Form1
 			Dim matchesReversed As List(Of Single) = New List(Of Single)(matches)
 			matchesReversed.Sort()
 			matchesReversed.Reverse()
-			If matchesReversed(0) > 0.85F AndAlso matchesReversed(1) < 0.5F Then
+			If matchesReversed(0) > 0.75F AndAlso matchesReversed(0) - matchesReversed(1) > 0.4F Then
 				Dim studentB As Student = rightUnmatchedList(matches.IndexOf(matchesReversed(0)))
 				dh.RemoveFromList(studentA, leftUnmatchedList)
 				dh.AddToList(studentA, leftMatchedList)
@@ -393,6 +396,7 @@ Public Class Form1
 		UpdateMatchCount()
 		btnMatch.Visible = False
 		btnSave.Visible = True
+		hasMatched = True
 	End Sub
 
 	Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
@@ -413,8 +417,8 @@ Public Class Form1
 	End Sub
 
 	Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
-		ComparisonPanel.Visible = False
-		LaunchPanel.Visible = True
+		ComparisonPanel.Hide()
+		LaunchPanel.Show()
 	End Sub
 
 	Private Sub DgUnmatchedLeft_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnmatchedLeft.CellEndEdit
@@ -453,6 +457,16 @@ Public Class Form1
 			Else
 				btnConfirm.Enabled = False
 			End If
+		End If
+	End Sub
+
+	Private Sub DgUnmatchedLeft_SelectionChanged(sender As Object, e As EventArgs) Handles dgUnmatchedLeft.SelectionChanged
+		If hasMatched Then
+			Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
+			Dim selectedStudent As Student = row.DataBoundItem.Object
+			er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+			dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+			dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
 		End If
 	End Sub
 End Class

@@ -82,7 +82,7 @@ Partial Class Form1
 		Me.btnContinue.Location = New System.Drawing.Point(670, 394)
 		Me.btnContinue.Name = "btnContinue"
 		Me.btnContinue.Size = New System.Drawing.Size(75, 23)
-		Me.btnContinue.TabIndex = 3
+		Me.btnContinue.TabIndex = 2
 		Me.btnContinue.Text = "Continue"
 		Me.btnContinue.UseVisualStyleBackColor = True
 		'
@@ -160,6 +160,7 @@ Partial Class Form1
 		Me.fileLocation2.ReadOnly = True
 		Me.fileLocation2.Size = New System.Drawing.Size(358, 20)
 		Me.fileLocation2.TabIndex = 13
+		Me.fileLocation2.TabStop = False
 		'
 		'fileLocation1
 		'
@@ -169,6 +170,7 @@ Partial Class Form1
 		Me.fileLocation1.ReadOnly = True
 		Me.fileLocation1.Size = New System.Drawing.Size(358, 20)
 		Me.fileLocation1.TabIndex = 13
+		Me.fileLocation1.TabStop = False
 		'
 		'lblStudents
 		'
@@ -198,7 +200,7 @@ Partial Class Form1
 		Me.btnBrowse2.Location = New System.Drawing.Point(362, 218)
 		Me.btnBrowse2.Name = "btnBrowse2"
 		Me.btnBrowse2.Size = New System.Drawing.Size(75, 23)
-		Me.btnBrowse2.TabIndex = 11
+		Me.btnBrowse2.TabIndex = 1
 		Me.btnBrowse2.Text = "Browse..."
 		Me.btnBrowse2.UseVisualStyleBackColor = True
 		'
@@ -208,7 +210,7 @@ Partial Class Form1
 		Me.btnBrowse1.Location = New System.Drawing.Point(362, 101)
 		Me.btnBrowse1.Name = "btnBrowse1"
 		Me.btnBrowse1.Size = New System.Drawing.Size(75, 23)
-		Me.btnBrowse1.TabIndex = 11
+		Me.btnBrowse1.TabIndex = 0
 		Me.btnBrowse1.Text = "Browse..."
 		Me.btnBrowse1.UseVisualStyleBackColor = True
 		'
@@ -254,7 +256,7 @@ Partial Class Form1
 		Me.btnConfirm.Location = New System.Drawing.Point(358, 328)
 		Me.btnConfirm.Name = "btnConfirm"
 		Me.btnConfirm.Size = New System.Drawing.Size(85, 23)
-		Me.btnConfirm.TabIndex = 9
+		Me.btnConfirm.TabIndex = 4
 		Me.btnConfirm.Text = "Confirm Match"
 		Me.btnConfirm.UseVisualStyleBackColor = True
 		Me.btnConfirm.Visible = False
@@ -286,6 +288,7 @@ Partial Class Form1
 		Me.tcLeft.SelectedIndex = 0
 		Me.tcLeft.Size = New System.Drawing.Size(369, 294)
 		Me.tcLeft.TabIndex = 6
+		Me.tcLeft.TabStop = False
 		'
 		'tabMatched1
 		'
@@ -315,7 +318,8 @@ Partial Class Form1
 		Me.dgMatchedLeft.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgMatchedLeft.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
 		Me.dgMatchedLeft.Size = New System.Drawing.Size(355, 262)
-		Me.dgMatchedLeft.TabIndex = 0
+		Me.dgMatchedLeft.TabIndex = 9
+		Me.dgMatchedLeft.TabStop = False
 		'
 		'tabUnmatched1
 		'
@@ -344,7 +348,8 @@ Partial Class Form1
 		Me.dgUnmatchedLeft.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgUnmatchedLeft.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
 		Me.dgUnmatchedLeft.Size = New System.Drawing.Size(355, 262)
-		Me.dgUnmatchedLeft.TabIndex = 0
+		Me.dgUnmatchedLeft.TabIndex = 7
+		Me.dgUnmatchedLeft.TabStop = False
 		'
 		'tcRight
 		'
@@ -356,6 +361,7 @@ Partial Class Form1
 		Me.tcRight.SelectedIndex = 0
 		Me.tcRight.Size = New System.Drawing.Size(369, 294)
 		Me.tcRight.TabIndex = 6
+		Me.tcRight.TabStop = False
 		'
 		'tabMatched2
 		'
@@ -385,7 +391,8 @@ Partial Class Form1
 		Me.dgMatchedRight.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgMatchedRight.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
 		Me.dgMatchedRight.Size = New System.Drawing.Size(355, 262)
-		Me.dgMatchedRight.TabIndex = 0
+		Me.dgMatchedRight.TabIndex = 10
+		Me.dgMatchedRight.TabStop = False
 		'
 		'tabUnmatched2
 		'
@@ -415,7 +422,8 @@ Partial Class Form1
 		Me.dgUnmatchedRight.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgUnmatchedRight.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
 		Me.dgUnmatchedRight.Size = New System.Drawing.Size(355, 262)
-		Me.dgUnmatchedRight.TabIndex = 0
+		Me.dgUnmatchedRight.TabIndex = 8
+		Me.dgUnmatchedRight.TabStop = False
 		'
 		'lblMatched
 		'
@@ -444,7 +452,7 @@ Partial Class Form1
 		Me.btnBack.Location = New System.Drawing.Point(53, 394)
 		Me.btnBack.Name = "btnBack"
 		Me.btnBack.Size = New System.Drawing.Size(92, 23)
-		Me.btnBack.TabIndex = 4
+		Me.btnBack.TabIndex = 5
 		Me.btnBack.Text = "Back"
 		Me.btnBack.UseVisualStyleBackColor = True
 		'
@@ -454,7 +462,7 @@ Partial Class Form1
 		Me.btnSave.Location = New System.Drawing.Point(653, 394)
 		Me.btnSave.Name = "btnSave"
 		Me.btnSave.Size = New System.Drawing.Size(92, 23)
-		Me.btnSave.TabIndex = 4
+		Me.btnSave.TabIndex = 6
 		Me.btnSave.Text = "Save and Close"
 		Me.btnSave.UseVisualStyleBackColor = True
 		Me.btnSave.Visible = False
