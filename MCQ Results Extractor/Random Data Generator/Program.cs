@@ -38,13 +38,13 @@ namespace Random_Data_Generator
 			{
 				if (random.Next(2) == 1)
 				{
-					firstNames.Add(personGenerator.GenerateRandomMaleFirstName().ToLower());
+					firstNames.Add(personGenerator.GenerateRandomMaleFirstName());
 				}
 				else
 				{
-					firstNames.Add(personGenerator.GenerateRandomFemaleFirstName().ToLower());
+					firstNames.Add(personGenerator.GenerateRandomFemaleFirstName());
 				}
-				lastNames.Add(personGenerator.GenerateRandomLastName().ToLower());
+				lastNames.Add(personGenerator.GenerateRandomLastName());
 			}
 		}
 
@@ -100,7 +100,9 @@ namespace Random_Data_Generator
                 workSheet.Cells[1, 1] = "Last Name";
                 workSheet.Cells[1, 2] = "First Name";
                 workSheet.Cells[1, 3] = "Username";
-                workSheet.Cells[1, 4] = "Exam [Total Pts: 100 Percentage]";
+				workSheet.Cells[1, 4] = "Assessment 1";
+				workSheet.Cells[1, 5] = "Assessment 2";
+				workSheet.Cells[1, 6] = "Exam";
             }
 
             Random rand = new Random();
@@ -152,6 +154,10 @@ namespace Random_Data_Generator
 			}
 
 			workBook.SaveAs(path);
+			if(isDirty)
+			{
+				workBook.SaveAs(path, XlFileFormat.xlCSV);
+			}
 
 			workBook.Close();
 			xlApp.Quit();
@@ -185,54 +191,6 @@ namespace Random_Data_Generator
 						{
 							string num = rand.Next(0, 9).ToString();
 							temp[i] = num[0];
-
-							switch ((int)temp[i])
-							{
-								case 0:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 1:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 2:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 3:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 4:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 5:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 6:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 7:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 8:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								case 9:
-									Console.WriteLine("New character: {0}", temp[i].ToString());
-									Console.WriteLine("As int: {0}", (int)temp[i]);
-									break;
-								default:
-									Console.WriteLine("Invalid character: {0}", temp[i]);
-									break;
-							}
-
 						}
 					}
 					else

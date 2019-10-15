@@ -22,11 +22,13 @@ Public Class Form1
 
 	Dim bindings As List(Of BindingListView(Of Student)) = New List(Of BindingListView(Of Student))()
 
+	Dim hasValidResultFile As Boolean
+	Dim hasValidStudentFile As Boolean
 	Dim selectedHeader As String
 
 	Private Sub btnBrowse1_Click(sender As Object, e As EventArgs) Handles btnBrowse1.Click
         With OpenFileDialog1                        'Opens a file browser dialog
-			.Title = "Excel file with results"      'Dialog box title
+			.Title = "Excel file with exam results"      'Dialog box title
 			.FileName = ""
 			.Filter = "CSV Files (*.csv)|*.csv|Excel File|*.xlsx;*.xls"     'Filter to only show Excel and CSV files
 
@@ -38,10 +40,17 @@ Public Class Form1
                 'Validates the file selected
                 If Trim(sFileName) <> "" Then
                     If OpenFileDialog1.CheckFileExists Then
-                        fileLocation1.Text = OpenFileDialog1.FileName
-                        er.ResultsFilePath = OpenFileDialog1.FileName
-                    Else
-                        Throw New System.Exception("Files does not exist.")
+						fileLocation1.Text = OpenFileDialog1.FileName
+						If er.ValidateFile(sFileName, True) Then
+							er.ResultsFilePath = OpenFileDialog1.FileName
+							hasValidResultFile = True
+						Else
+							hasValidResultFile = False
+							er.ResultsFilePath = String.Empty
+							MessageBox.Show("Column headers not as expected." & vbCrLf & "Please select a valid file.", "Invalid file selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+						End If
+					Else
+						Throw New System.Exception("Files does not exist.")
                     End If
                 End If
             End If
@@ -63,14 +72,19 @@ Public Class Form1
 				If Trim(sFileName) <> "" Then
 					If OpenFileDialog1.CheckFileExists Then
 						fileLocation2.Text = OpenFileDialog1.FileName
-						er.StudentFilePath = OpenFileDialog1.FileName
+						If er.ValidateFile(sFileName, False) Then
+							er.StudentFilePath = OpenFileDialog1.FileName
+							hasValidStudentFile = True
+						Else
+							er.StudentFilePath = String.Empty
+							hasValidStudentFile = False
+						End If
 					Else
 						Throw New System.Exception("Files does not exist.")
 					End If
 				End If
 			End If
 		End With
-		Dim headers As List(Of String) = er.CheckHeaders(er.StudentFilePath)
 
 		Dim list = DirectCast(grpBox.Controls, IList)
 
@@ -82,20 +96,27 @@ Public Class Form1
 			End If
 		Next
 
-		radbtn1.Text = headers(0)
-		radbtn1.Checked = True
-		Dim location As Point = radbtn1.Location
-		For i = 1 To headers.Count - 1
-			Dim radbtn = New RadioButton()
-			radbtn.Text = headers(i)
-			radbtn.AutoSize = True
-			radbtn.Location = New Point(location.X, location.Y + i * 20)
-			radbtn.Parent = radbtn1.Parent
-			radbtn.Checked = False
-			radbtn.Anchor = AnchorStyles.Top
-		Next
+		If hasValidStudentFile Then
+			Dim headers As List(Of String) = er.CheckHeaders(er.StudentFilePath)
 
-		pnlHeaderSelection.Visible = True
+			radbtn1.Text = headers(0)
+			radbtn1.Checked = True
+			Dim location As Point = radbtn1.Location
+			For i = 1 To headers.Count - 1
+				Dim radbtn = New RadioButton()
+				radbtn.Text = headers(i)
+				radbtn.AutoSize = True
+				radbtn.Location = New Point(location.X, location.Y + i * 20)
+				radbtn.Parent = radbtn1.Parent
+				radbtn.Checked = False
+				radbtn.Anchor = AnchorStyles.Top
+			Next
+
+			pnlHeaderSelection.Show()
+		Else
+			pnlHeaderSelection.Hide()
+			MessageBox.Show("Column headers not as expected." & vbCrLf & "Please select a valid file.", "Invalid file selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+		End If
 
 	End Sub
 
@@ -133,9 +154,11 @@ Public Class Form1
         dgUnmatchedRight.Columns(3).SortMode = DataGridViewColumnSortMode.NotSortable
         dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(1), ListSortDirection.Ascending)
 
-        'Switch the current panel
-        LaunchPanel.Hide()
-        ComparisonPanel.Show()
+		'Switch the current panel
+		LaunchPanel.Hide()
+		tcRight.TabPages(0).Text = String.Format("Unmatched ({0})", dgUnmatchedRight.Rows.Count)
+		tcLeft.TabPages(0).Text = String.Format("Unmatched ({0})", dgUnmatchedLeft.Rows.Count)
+		ComparisonPanel.Show()
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -237,20 +260,70 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub DgMatchedLeft_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgMatchedLeft.RowsAdded
-        UpdateMatchCount()
-    End Sub
+	Private Sub DgMatchedLeft_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgMatchedLeft.RowsAdded
+		UpdateMatchCount()
+		Try
+			tcLeft.TabPages(0).Text = String.Format("Matched ({0})", dgMatchedLeft.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
 
-    Private Sub DgMatchedLeft_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgMatchedLeft.RowsRemoved
-        UpdateMatchCount()
-    End Sub
+	Private Sub DgMatchedLeft_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgMatchedLeft.RowsRemoved
+		UpdateMatchCount()
+		Try
+			tcLeft.TabPages(0).Text = String.Format("Matched ({0})", dgMatchedLeft.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
 
-    Private Sub UpdateMatchCount()
-        numMatched = dgMatchedLeft.Rows.Count
-        lblMatched.Text = "Matched: " & numMatched & "/" & totalStudents
-    End Sub
+	Private Sub DgMatchedRight_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgMatchedRight.RowsAdded
+		Try
+			tcRight.TabPages(0).Text = String.Format("Matched ({0})", dgMatchedRight.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
 
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwrkMatching.DoWork
+	Private Sub DgMatchedRight_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgMatchedRight.RowsRemoved
+		Try
+			tcRight.TabPages(0).Text = String.Format("Matched ({0})", dgMatchedRight.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
+
+	Private Sub DgUnmatchedLeft_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgUnmatchedLeft.RowsAdded
+		Try
+			tcLeft.TabPages(1).Text = String.Format("Unmatched ({0})", dgUnmatchedLeft.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
+
+	Private Sub DgUnmatchedLeft_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgUnmatchedLeft.RowsRemoved
+		Try
+			tcLeft.TabPages(1).Text = String.Format("Unmatched ({0})", dgUnmatchedLeft.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
+
+	Private Sub DgUnmatchedRight_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgUnmatchedRight.RowsAdded
+		Try
+			tcRight.TabPages(1).Text = String.Format("Unmatched ({0})", dgUnmatchedRight.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
+
+	Private Sub DgUnmatchedRight_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgUnmatchedRight.RowsRemoved
+		Try
+			tcRight.TabPages(1).Text = String.Format("Unmatched ({0})", dgUnmatchedRight.Rows.Count)
+		Catch ex As Exception
+		End Try
+	End Sub
+
+	Private Sub UpdateMatchCount()
+		numMatched = dgMatchedLeft.Rows.Count
+		lblMatched.Text = "Matched: " & numMatched & "/" & totalStudents
+	End Sub
+
+	Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwrkMatching.DoWork
 
         leftIDs = New List(Of Integer)
         rightIDs = New List(Of Integer)
@@ -371,6 +444,10 @@ Public Class Form1
 		dh.UpdateGrid(dgMatchedRight, rightMatchedList)
 		tcLeft.TabPages.Insert(0, tabMatched1)
 		tcRight.TabPages.Insert(0, tabMatched2)
+		tcLeft.TabPages(0).Text = String.Format("Matched ({0})", dgMatchedLeft.Rows.Count)
+		tcRight.TabPages(0).Text = String.Format("Matched ({0})", dgMatchedRight.Rows.Count)
+		tcLeft.TabPages(1).Text = String.Format("Unmatched ({0})", dgUnmatchedLeft.Rows.Count)
+		tcRight.TabPages(1).Text = String.Format("Unmatched ({0})", dgUnmatchedRight.Rows.Count)
 		tcLeft.SelectTab(tabMatched1)
 		tcRight.SelectTab(tabMatched2)
 
@@ -412,6 +489,7 @@ Public Class Form1
 			End If
 		End With
 
+		MessageBox.Show("Excel file saved successfully." & vbCrLf & "Application will now close.", "Success", MessageBoxButtons.OK)
 		Application.Exit()
 		End
 	End Sub
@@ -462,11 +540,15 @@ Public Class Form1
 
 	Private Sub DgUnmatchedLeft_SelectionChanged(sender As Object, e As EventArgs) Handles dgUnmatchedLeft.SelectionChanged
 		If hasMatched Then
-			Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
-			Dim selectedStudent As Student = row.DataBoundItem.Object
-			er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
-			dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
-			dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+			Try
+				Dim row As DataGridViewRow = dgUnmatchedLeft.SelectedRows(0)
+				Dim selectedStudent As Student = row.DataBoundItem.Object
+				er.Partial_Match_Similarity(selectedStudent, rightUnmatchedList)
+				dh.UpdateGrid(dgUnmatchedRight, rightUnmatchedList)
+				dgUnmatchedRight.Sort(dgUnmatchedRight.Columns(4), ListSortDirection.Descending)
+			Catch ex As Exception
+
+			End Try
 		End If
 	End Sub
 End Class

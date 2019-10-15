@@ -77,8 +77,94 @@ Friend Class ExcelReader
 				Exit For
 			End If
 		Next
-
 		Return tempList
+	End Function
+
+	Public Function ValidateFile(ByVal sFile As String, isResults As Boolean) As Boolean
+		Dim isValid As Boolean = False
+		Dim requiredHeaderCount As Integer = If(isResults, 4, 3)
+		Dim headerCount As Integer = 0
+		If Path.GetExtension(sFile) <> ".csv" Then
+			Dim file As FileInfo = New FileInfo(sFile)
+			Dim xlPackage As New ExcelPackage(file)
+			Dim workSheet As ExcelWorksheet = xlPackage.Workbook.Worksheets(1)
+			Dim colCount As Integer = workSheet.Dimension.End.Column
+			Dim range As ExcelRange = workSheet.Cells(1, 1, 1, colCount)
+			For i As Integer = 1 To colCount
+				Dim header As String = range(1, i).Value
+				If isResults Then
+					Select Case header
+						Case "Initial"
+							headerCount += 1
+						Case "Surname"
+							headerCount += 1
+						Case "Student number"
+							headerCount += 1
+						Case "Score"
+							headerCount += 1
+						Case Else
+							Exit Select
+					End Select
+				Else
+					Select Case header
+						Case "First Name"
+							headerCount += 1
+						Case "Last Name"
+							headerCount += 1
+						Case "Username"
+							headerCount += 1
+						Case Else
+							Exit Select
+					End Select
+				End If
+				If headerCount = requiredHeaderCount Then
+					isValid = True
+					Exit For
+				End If
+			Next
+		Else
+			Dim tfp As New TextFieldParser(sFile)
+			tfp.Delimiters = New String() {","}
+			tfp.TextFieldType = FieldType.Delimited
+
+			Dim headers As String() = tfp.ReadFields()
+			For index As Integer = 0 To headers.Count
+				If headers(index) <> "" And headers(index) <> Nothing Then
+					If isResults Then
+						Select Case headers(index)
+							Case "Initial"
+								headerCount += 1
+							Case "Surname"
+								headerCount += 1
+							Case "Student number"
+								headerCount += 1
+							Case "Score"
+								headerCount += 1
+							Case Else
+								Exit Select
+						End Select
+					Else
+						Select Case headers(index)
+							Case "First Name"
+								headerCount += 1
+							Case "Last Name"
+								headerCount += 1
+							Case "Username"
+								headerCount += 1
+							Case "Last Access"
+								Exit Select
+							Case Else
+								headerCount += 1
+						End Select
+					End If
+				End If
+				If headerCount = requiredHeaderCount Then
+					isValid = True
+					Exit For
+				End If
+			Next
+		End If
+		Return isValid
 	End Function
 
 	Public Function Read_Excel(ByVal sFile As String, selectedHeader As String) As List(Of Student) 'Extracts the data from the excel file

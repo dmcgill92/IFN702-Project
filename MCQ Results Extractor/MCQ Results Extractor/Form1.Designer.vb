@@ -22,17 +22,17 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+		Dim lblHeaderSelection As System.Windows.Forms.Label
+		Dim lblStudents As System.Windows.Forms.Label
+		Dim lblResults As System.Windows.Forms.Label
 		Me.btnContinue = New System.Windows.Forms.Button()
 		Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
 		Me.LaunchPanel = New System.Windows.Forms.Panel()
 		Me.pnlHeaderSelection = New System.Windows.Forms.Panel()
 		Me.grpBox = New System.Windows.Forms.GroupBox()
 		Me.radbtn1 = New System.Windows.Forms.RadioButton()
-		Me.lblHeaderSelection = New System.Windows.Forms.Label()
 		Me.fileLocation2 = New System.Windows.Forms.TextBox()
 		Me.fileLocation1 = New System.Windows.Forms.TextBox()
-		Me.lblStudents = New System.Windows.Forms.Label()
-		Me.lblResults = New System.Windows.Forms.Label()
 		Me.btnBrowse2 = New System.Windows.Forms.Button()
 		Me.btnBrowse1 = New System.Windows.Forms.Button()
 		Me.ComparisonPanel = New System.Windows.Forms.Panel()
@@ -58,6 +58,9 @@ Partial Class Form1
 		Me.bgwrkMatching = New System.ComponentModel.BackgroundWorker()
 		Me.bgwrkDataHandler = New System.ComponentModel.BackgroundWorker()
 		Me.bgwrkPartialMatch = New System.ComponentModel.BackgroundWorker()
+		lblHeaderSelection = New System.Windows.Forms.Label()
+		lblStudents = New System.Windows.Forms.Label()
+		lblResults = New System.Windows.Forms.Label()
 		Me.LaunchPanel.SuspendLayout()
 		Me.pnlHeaderSelection.SuspendLayout()
 		Me.grpBox.SuspendLayout()
@@ -74,6 +77,39 @@ Partial Class Form1
 		Me.tabUnmatched2.SuspendLayout()
 		CType(Me.dgUnmatchedRight, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
+		'
+		'lblHeaderSelection
+		'
+		lblHeaderSelection.Anchor = System.Windows.Forms.AnchorStyles.Top
+		lblHeaderSelection.AutoSize = True
+		lblHeaderSelection.Location = New System.Drawing.Point(81, 11)
+		lblHeaderSelection.Name = "lblHeaderSelection"
+		lblHeaderSelection.Size = New System.Drawing.Size(182, 13)
+		lblHeaderSelection.TabIndex = 15
+		lblHeaderSelection.Text = "Select correct results column header:"
+		lblHeaderSelection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		'
+		'lblStudents
+		'
+		lblStudents.Anchor = System.Windows.Forms.AnchorStyles.Top
+		lblStudents.AutoSize = True
+		lblStudents.Location = New System.Drawing.Point(334, 163)
+		lblStudents.Name = "lblStudents"
+		lblStudents.Size = New System.Drawing.Size(132, 13)
+		lblStudents.TabIndex = 12
+		lblStudents.Text = "Student name file location:"
+		lblStudents.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		'
+		'lblResults
+		'
+		lblResults.Anchor = System.Windows.Forms.AnchorStyles.Top
+		lblResults.AutoSize = True
+		lblResults.Location = New System.Drawing.Point(340, 49)
+		lblResults.Name = "lblResults"
+		lblResults.Size = New System.Drawing.Size(120, 13)
+		lblResults.TabIndex = 12
+		lblResults.Text = "Exam result file location:"
+		lblResults.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 		'
 		'btnContinue
 		'
@@ -95,8 +131,8 @@ Partial Class Form1
 		Me.LaunchPanel.Controls.Add(Me.pnlHeaderSelection)
 		Me.LaunchPanel.Controls.Add(Me.fileLocation2)
 		Me.LaunchPanel.Controls.Add(Me.fileLocation1)
-		Me.LaunchPanel.Controls.Add(Me.lblStudents)
-		Me.LaunchPanel.Controls.Add(Me.lblResults)
+		Me.LaunchPanel.Controls.Add(lblStudents)
+		Me.LaunchPanel.Controls.Add(lblResults)
 		Me.LaunchPanel.Controls.Add(Me.btnBrowse2)
 		Me.LaunchPanel.Controls.Add(Me.btnBrowse1)
 		Me.LaunchPanel.Controls.Add(Me.btnContinue)
@@ -110,7 +146,7 @@ Partial Class Form1
 		'
 		Me.pnlHeaderSelection.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
 		Me.pnlHeaderSelection.Controls.Add(Me.grpBox)
-		Me.pnlHeaderSelection.Controls.Add(Me.lblHeaderSelection)
+		Me.pnlHeaderSelection.Controls.Add(lblHeaderSelection)
 		Me.pnlHeaderSelection.Location = New System.Drawing.Point(228, 267)
 		Me.pnlHeaderSelection.Name = "pnlHeaderSelection"
 		Me.pnlHeaderSelection.Size = New System.Drawing.Size(345, 150)
@@ -141,17 +177,6 @@ Partial Class Form1
 		Me.radbtn1.Text = "Exam [Total Pts: 100 Percentage] |823157"
 		Me.radbtn1.UseVisualStyleBackColor = True
 		'
-		'lblHeaderSelection
-		'
-		Me.lblHeaderSelection.Anchor = System.Windows.Forms.AnchorStyles.Top
-		Me.lblHeaderSelection.AutoSize = True
-		Me.lblHeaderSelection.Location = New System.Drawing.Point(100, 11)
-		Me.lblHeaderSelection.Name = "lblHeaderSelection"
-		Me.lblHeaderSelection.Size = New System.Drawing.Size(145, 13)
-		Me.lblHeaderSelection.TabIndex = 15
-		Me.lblHeaderSelection.Text = "Select correct results header:"
-		Me.lblHeaderSelection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-		'
 		'fileLocation2
 		'
 		Me.fileLocation2.Anchor = System.Windows.Forms.AnchorStyles.Top
@@ -171,28 +196,6 @@ Partial Class Form1
 		Me.fileLocation1.Size = New System.Drawing.Size(358, 20)
 		Me.fileLocation1.TabIndex = 13
 		Me.fileLocation1.TabStop = False
-		'
-		'lblStudents
-		'
-		Me.lblStudents.Anchor = System.Windows.Forms.AnchorStyles.Top
-		Me.lblStudents.AutoSize = True
-		Me.lblStudents.Location = New System.Drawing.Point(334, 163)
-		Me.lblStudents.Name = "lblStudents"
-		Me.lblStudents.Size = New System.Drawing.Size(132, 13)
-		Me.lblStudents.TabIndex = 12
-		Me.lblStudents.Text = "Student name file location:"
-		Me.lblStudents.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-		'
-		'lblResults
-		'
-		Me.lblResults.Anchor = System.Windows.Forms.AnchorStyles.Top
-		Me.lblResults.AutoSize = True
-		Me.lblResults.Location = New System.Drawing.Point(351, 49)
-		Me.lblResults.Name = "lblResults"
-		Me.lblResults.Size = New System.Drawing.Size(96, 13)
-		Me.lblResults.TabIndex = 12
-		Me.lblResults.Text = "Result file location:"
-		Me.lblResults.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 		'
 		'btnBrowse2
 		'
@@ -484,8 +487,8 @@ Partial Class Form1
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.ClientSize = New System.Drawing.Size(800, 450)
-		Me.Controls.Add(Me.ComparisonPanel)
 		Me.Controls.Add(Me.LaunchPanel)
+		Me.Controls.Add(Me.ComparisonPanel)
 		Me.MinimumSize = New System.Drawing.Size(800, 400)
 		Me.Name = "Form1"
 		Me.ShowIcon = False
@@ -517,34 +520,31 @@ Partial Class Form1
     Friend WithEvents fileLocation1 As TextBox
     Friend WithEvents btnBrowse1 As Button
     Friend WithEvents fileLocation2 As TextBox
-    Friend WithEvents lblStudents As Label
-    Friend WithEvents lblResults As Label
-    Friend WithEvents btnBrowse2 As Button
-    Friend WithEvents ComparisonPanel As Panel
-    Friend WithEvents btnSave As Button
-    Friend WithEvents SaveFileDialog1 As SaveFileDialog
-    Friend WithEvents btnMatch As Button
-    Friend WithEvents lblMatched As Label
-    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents tcLeft As TabControl
-    Friend WithEvents tabMatched1 As TabPage
-    Friend WithEvents dgMatchedLeft As DataGridView
-    Friend WithEvents tabUnmatched1 As TabPage
-    Friend WithEvents dgUnmatchedLeft As DataGridView
-    Friend WithEvents tcRight As TabControl
-    Friend WithEvents tabMatched2 As TabPage
-    Friend WithEvents dgMatchedRight As DataGridView
-    Friend WithEvents tabUnmatched2 As TabPage
-    Friend WithEvents dgUnmatchedRight As DataGridView
-    Friend WithEvents btnConfirm As Button
-    Friend WithEvents bgwrkMatching As System.ComponentModel.BackgroundWorker
-    Friend WithEvents bgwrkDataHandler As System.ComponentModel.BackgroundWorker
-    Friend WithEvents progBar1 As ProgressBar
-    Friend WithEvents lblProg As Label
+	Friend WithEvents btnBrowse2 As Button
+	Friend WithEvents ComparisonPanel As Panel
+	Friend WithEvents btnSave As Button
+	Friend WithEvents SaveFileDialog1 As SaveFileDialog
+	Friend WithEvents btnMatch As Button
+	Friend WithEvents lblMatched As Label
+	Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
+	Friend WithEvents tcLeft As TabControl
+	Friend WithEvents tabMatched1 As TabPage
+	Friend WithEvents dgMatchedLeft As DataGridView
+	Friend WithEvents tabUnmatched1 As TabPage
+	Friend WithEvents dgUnmatchedLeft As DataGridView
+	Friend WithEvents tcRight As TabControl
+	Friend WithEvents tabMatched2 As TabPage
+	Friend WithEvents dgMatchedRight As DataGridView
+	Friend WithEvents tabUnmatched2 As TabPage
+	Friend WithEvents dgUnmatchedRight As DataGridView
+	Friend WithEvents btnConfirm As Button
+	Friend WithEvents bgwrkMatching As System.ComponentModel.BackgroundWorker
+	Friend WithEvents bgwrkDataHandler As System.ComponentModel.BackgroundWorker
+	Friend WithEvents progBar1 As ProgressBar
+	Friend WithEvents lblProg As Label
 	Friend WithEvents bgwrkPartialMatch As System.ComponentModel.BackgroundWorker
 	Friend WithEvents pnlHeaderSelection As Panel
 	Friend WithEvents radbtn1 As RadioButton
-	Friend WithEvents lblHeaderSelection As Label
 	Friend WithEvents grpBox As GroupBox
 	Friend WithEvents btnBack As Button
 End Class
