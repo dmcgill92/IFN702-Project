@@ -16,7 +16,7 @@ namespace Random_Data_Generator
 		List<string> lastNames = new List<string>();
 		List<string> studentNums = new List<string>();
 		List<int> results = new List<int>();
-		int num = 500;
+		int num = 100;
 
 		static void Main(string[] args)
 		{
@@ -54,7 +54,7 @@ namespace Random_Data_Generator
 
 			for (int iter = 0; iter < num; iter++)
 			{
-				studentNums.Add(random.Next(990000, 1400000).ToString());
+				studentNums.Add(random.Next(900000, 1400000).ToString());
 			}
 		}
 

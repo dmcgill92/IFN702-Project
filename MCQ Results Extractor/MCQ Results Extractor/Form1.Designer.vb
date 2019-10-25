@@ -25,6 +25,7 @@ Partial Class Form1
 		Dim lblHeaderSelection As System.Windows.Forms.Label
 		Dim lblStudents As System.Windows.Forms.Label
 		Dim lblResults As System.Windows.Forms.Label
+		Dim lblExamResults As System.Windows.Forms.Label
 		Me.btnContinue = New System.Windows.Forms.Button()
 		Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
 		Me.LaunchPanel = New System.Windows.Forms.Panel()
@@ -58,9 +59,12 @@ Partial Class Form1
 		Me.bgwrkMatching = New System.ComponentModel.BackgroundWorker()
 		Me.bgwrkDataHandler = New System.ComponentModel.BackgroundWorker()
 		Me.bgwrkPartialMatch = New System.ComponentModel.BackgroundWorker()
+		Me.lblStudentNames = New System.Windows.Forms.Label()
+		Me.lblAuthor = New System.Windows.Forms.Label()
 		lblHeaderSelection = New System.Windows.Forms.Label()
 		lblStudents = New System.Windows.Forms.Label()
 		lblResults = New System.Windows.Forms.Label()
+		lblExamResults = New System.Windows.Forms.Label()
 		Me.LaunchPanel.SuspendLayout()
 		Me.pnlHeaderSelection.SuspendLayout()
 		Me.grpBox.SuspendLayout()
@@ -246,7 +250,7 @@ Partial Class Form1
 		'
 		'progBar1
 		'
-		Me.progBar1.Anchor = System.Windows.Forms.AnchorStyles.Top
+		Me.progBar1.Anchor = System.Windows.Forms.AnchorStyles.Bottom
 		Me.progBar1.Location = New System.Drawing.Point(280, 370)
 		Me.progBar1.Name = "progBar1"
 		Me.progBar1.Size = New System.Drawing.Size(240, 20)
@@ -272,24 +276,29 @@ Partial Class Form1
 		Me.TableLayoutPanel1.ColumnCount = 2
 		Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
 		Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-		Me.TableLayoutPanel1.Controls.Add(Me.tcLeft, 0, 0)
-		Me.TableLayoutPanel1.Controls.Add(Me.tcRight, 1, 0)
+		Me.TableLayoutPanel1.Controls.Add(Me.lblStudentNames, 1, 0)
+		Me.TableLayoutPanel1.Controls.Add(Me.tcRight, 1, 1)
+		Me.TableLayoutPanel1.Controls.Add(lblExamResults, 0, 0)
+		Me.TableLayoutPanel1.Controls.Add(Me.tcLeft, 0, 1)
 		Me.TableLayoutPanel1.Location = New System.Drawing.Point(25, 22)
 		Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-		Me.TableLayoutPanel1.RowCount = 1
-		Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+		Me.TableLayoutPanel1.RowCount = 2
+		Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
+		Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
 		Me.TableLayoutPanel1.Size = New System.Drawing.Size(750, 300)
 		Me.TableLayoutPanel1.TabIndex = 8
 		'
 		'tcLeft
 		'
+		Me.tcLeft.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+			Or System.Windows.Forms.AnchorStyles.Left) _
+			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
 		Me.tcLeft.Controls.Add(Me.tabMatched1)
 		Me.tcLeft.Controls.Add(Me.tabUnmatched1)
-		Me.tcLeft.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.tcLeft.Location = New System.Drawing.Point(3, 3)
+		Me.tcLeft.Location = New System.Drawing.Point(3, 15)
 		Me.tcLeft.Name = "tcLeft"
 		Me.tcLeft.SelectedIndex = 0
-		Me.tcLeft.Size = New System.Drawing.Size(369, 294)
+		Me.tcLeft.Size = New System.Drawing.Size(369, 285)
 		Me.tcLeft.TabIndex = 6
 		Me.tcLeft.TabStop = False
 		'
@@ -300,7 +309,7 @@ Partial Class Form1
 		Me.tabMatched1.Location = New System.Drawing.Point(4, 22)
 		Me.tabMatched1.Name = "tabMatched1"
 		Me.tabMatched1.Padding = New System.Windows.Forms.Padding(3)
-		Me.tabMatched1.Size = New System.Drawing.Size(361, 268)
+		Me.tabMatched1.Size = New System.Drawing.Size(361, 259)
 		Me.tabMatched1.TabIndex = 0
 		Me.tabMatched1.Text = "Matched"
 		Me.tabMatched1.UseVisualStyleBackColor = True
@@ -320,7 +329,7 @@ Partial Class Form1
 		Me.dgMatchedLeft.RowHeadersVisible = False
 		Me.dgMatchedLeft.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgMatchedLeft.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-		Me.dgMatchedLeft.Size = New System.Drawing.Size(355, 262)
+		Me.dgMatchedLeft.Size = New System.Drawing.Size(355, 253)
 		Me.dgMatchedLeft.TabIndex = 9
 		Me.dgMatchedLeft.TabStop = False
 		'
@@ -356,13 +365,15 @@ Partial Class Form1
 		'
 		'tcRight
 		'
+		Me.tcRight.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+			Or System.Windows.Forms.AnchorStyles.Left) _
+			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
 		Me.tcRight.Controls.Add(Me.tabMatched2)
 		Me.tcRight.Controls.Add(Me.tabUnmatched2)
-		Me.tcRight.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.tcRight.Location = New System.Drawing.Point(378, 3)
+		Me.tcRight.Location = New System.Drawing.Point(378, 15)
 		Me.tcRight.Name = "tcRight"
 		Me.tcRight.SelectedIndex = 0
-		Me.tcRight.Size = New System.Drawing.Size(369, 294)
+		Me.tcRight.Size = New System.Drawing.Size(369, 285)
 		Me.tcRight.TabIndex = 6
 		Me.tcRight.TabStop = False
 		'
@@ -373,7 +384,7 @@ Partial Class Form1
 		Me.tabMatched2.Location = New System.Drawing.Point(4, 22)
 		Me.tabMatched2.Name = "tabMatched2"
 		Me.tabMatched2.Padding = New System.Windows.Forms.Padding(3)
-		Me.tabMatched2.Size = New System.Drawing.Size(361, 268)
+		Me.tabMatched2.Size = New System.Drawing.Size(361, 259)
 		Me.tabMatched2.TabIndex = 0
 		Me.tabMatched2.Text = "Matched"
 		Me.tabMatched2.UseVisualStyleBackColor = True
@@ -393,7 +404,7 @@ Partial Class Form1
 		Me.dgMatchedRight.RowHeadersVisible = False
 		Me.dgMatchedRight.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
 		Me.dgMatchedRight.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-		Me.dgMatchedRight.Size = New System.Drawing.Size(355, 262)
+		Me.dgMatchedRight.Size = New System.Drawing.Size(355, 253)
 		Me.dgMatchedRight.TabIndex = 10
 		Me.dgMatchedRight.TabStop = False
 		'
@@ -482,13 +493,43 @@ Partial Class Form1
 		'
 		Me.bgwrkPartialMatch.WorkerReportsProgress = True
 		'
+		'lblExamResults
+		'
+		lblExamResults.Dock = System.Windows.Forms.DockStyle.Fill
+		lblExamResults.Location = New System.Drawing.Point(3, 0)
+		lblExamResults.Name = "lblExamResults"
+		lblExamResults.Size = New System.Drawing.Size(369, 12)
+		lblExamResults.TabIndex = 7
+		lblExamResults.Text = "Exam results file"
+		'
+		'lblStudentNames
+		'
+		Me.lblStudentNames.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.lblStudentNames.Location = New System.Drawing.Point(378, 0)
+		Me.lblStudentNames.Name = "lblStudentNames"
+		Me.lblStudentNames.Size = New System.Drawing.Size(369, 12)
+		Me.lblStudentNames.TabIndex = 8
+		Me.lblStudentNames.Text = "Student names file"
+		'
+		'lblAuthor
+		'
+		Me.lblAuthor.AutoSize = True
+		Me.lblAuthor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.lblAuthor.ForeColor = System.Drawing.SystemColors.ControlDark
+		Me.lblAuthor.Location = New System.Drawing.Point(661, 432)
+		Me.lblAuthor.Name = "lblAuthor"
+		Me.lblAuthor.Size = New System.Drawing.Size(136, 13)
+		Me.lblAuthor.TabIndex = 12
+		Me.lblAuthor.Text = "Developed by David McGill"
+		'
 		'Form1
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.ClientSize = New System.Drawing.Size(800, 450)
-		Me.Controls.Add(Me.LaunchPanel)
+		Me.Controls.Add(Me.lblAuthor)
 		Me.Controls.Add(Me.ComparisonPanel)
+		Me.Controls.Add(Me.LaunchPanel)
 		Me.MinimumSize = New System.Drawing.Size(800, 400)
 		Me.Name = "Form1"
 		Me.ShowIcon = False
@@ -512,6 +553,7 @@ Partial Class Form1
 		Me.tabUnmatched2.ResumeLayout(False)
 		CType(Me.dgUnmatchedRight, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.ResumeLayout(False)
+		Me.PerformLayout()
 
 	End Sub
 	Friend WithEvents btnContinue As Button
@@ -547,4 +589,6 @@ Partial Class Form1
 	Friend WithEvents radbtn1 As RadioButton
 	Friend WithEvents grpBox As GroupBox
 	Friend WithEvents btnBack As Button
+	Friend WithEvents lblStudentNames As Label
+	Friend WithEvents lblAuthor As Label
 End Class
